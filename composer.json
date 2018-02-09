@@ -24,6 +24,7 @@
         "symfony/templating": "^4.0",
         "symfony/validator": "^4.0",
         "symfony/web-link": "^4.0",
+        "symfony/web-server-bundle": "^4.0",
         "symfony/webpack-encore-pack": "*",
         "symfony/yaml": "^4.0"
     },
