@@ -30,7 +30,19 @@ class ImportSmallCommand extends AbstractImportCommand
         $this->bulkInsert($io);
     }
 
-    private function getBuilders(): \Generator
+    private function bulkInsert(SymfonyStyle $io): void
+    {
+        foreach ($this->getBuilders() as $config) {
+            $limit = $config[0];
+            $message = $config[1];
+            $builder = $config[2];
+            $progressBar = $io->createProgressBar($limit);
+            $this->persistFromCallable($progressBar, $limit, $builder);
+            $io->success($message);
+        }
+    }
+
+    private function getBuilders()
     {
         yield [1000000, 'Manufacturers created', function (int $iteration) {
             $manufacturer = new Manufacturer();
@@ -47,23 +59,12 @@ class ImportSmallCommand extends AbstractImportCommand
         }];
     }
 
-    private function bulkInsert(SymfonyStyle $io): void
-    {
-        foreach ($this->getBuilders() as $config) {
-            $limit = $config[0];
-            $message = $config[1];
-            $builder = $config[2];
-            $progressBar = $io->createProgressBar($limit);
-            $this->persistFromCallable($progressBar, $limit, $builder);
-            $io->success($message);
-        }
-    }
-
     private function persistFromCallable(ProgressBar $progressBar, int $limit, callable $builder): void
     {
         $count = 0;
         $em = $this->em;
-        foreach ($this->createGenerator($limit, $builder) as $manufacturer) {
+        $results = $this->createGenerator($limit, $builder);
+        foreach ($results as $manufacturer) {
             $em->persist($manufacturer);
             $count++;
             if (($count % $this->batchSize) === 0) {
@@ -78,7 +79,7 @@ class ImportSmallCommand extends AbstractImportCommand
         $progressBar->finish();
     }
 
-    private function createGenerator(int $limit, callable $builder): \Generator
+    private function createGenerator(int $limit, callable $builder)
     {
         for ($i = 1; $i <= $limit; $i++) {
             $entity = call_user_func($builder, $i);
