@@ -13,7 +13,7 @@ class ImportSmallCommand extends AbstractImportCommand
 {
     protected static $defaultName = 'app:import:small';
 
-    protected function configure()
+    protected function configure(): void
     {
         $this
             ->setDescription('Import small amount of data')
@@ -33,9 +33,7 @@ class ImportSmallCommand extends AbstractImportCommand
     private function bulkInsert(SymfonyStyle $io): void
     {
         foreach ($this->getBuilders() as $config) {
-            $limit = $config[0];
-            $message = $config[1];
-            $builder = $config[2];
+            [$limit, $message, $builder] = $config;
             $progressBar = $io->createProgressBar($limit);
             $this->persistFromCallable($progressBar, $limit, $builder);
             $io->success($message);
@@ -79,10 +77,10 @@ class ImportSmallCommand extends AbstractImportCommand
         $progressBar->finish();
     }
 
-    private function createGenerator(int $limit, callable $builder)
+    private function createGenerator(int $limit, callable $builder): \Generator
     {
         for ($i = 1; $i <= $limit; $i++) {
-            $entity = call_user_func($builder, $i);
+            $entity = $builder($i);
             yield $entity;
         }
     }
