@@ -80,8 +80,7 @@ class ImportSmallCommand extends AbstractImportCommand
     private function createGenerator(int $limit, callable $builder): \Generator
     {
         for ($i = 1; $i <= $limit; $i++) {
-            $entity = $builder($i);
-            yield $entity;
+            yield $builder($i);
         }
     }
 }
