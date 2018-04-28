@@ -2,11 +2,9 @@
 
 namespace App\Helper;
 
-use Ramsey\Uuid\Uuid;
-
 class Store
 {
-    private $data = [];
+    private $data;
 
     private $limit;
 
@@ -26,7 +24,6 @@ class Store
         $this->size++;
     }
 
-    /** @return Uuid[] */
     public function getAll(): array
     {
         return $this->data;
@@ -34,13 +31,24 @@ class Store
 
     private function isFull(): bool
     {
-        return $this->size > $this->limit;
+        return $this->size >= $this->limit;
     }
 
-    public function getRandom(): string
+    public function getOneByRandom(): string
     {
         $randomKey = random_int(0, $this->size - 1);
 
         return $this->data[$randomKey];
+    }
+
+    public function getRandom($limit): array
+    {
+        $results = [];
+        $keys = (array)array_rand($this->data, $limit);
+        foreach ($keys as $key) {
+            $results[] = $this->data[$key];
+        }
+
+        return $results;
     }
 }

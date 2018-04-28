@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Model\IdentifiableTrait;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use Ramsey\Uuid\Uuid;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\ProductRepository")
@@ -37,6 +38,7 @@ class Product
     public function __construct()
     {
         $this->categories = new ArrayCollection();
+        $this->id = Uuid::uuid4();
     }
 
     public function __toString()

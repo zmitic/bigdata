@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Model\IdentifiableTrait;
 use Doctrine\ORM\Mapping as ORM;
+use Ramsey\Uuid\Uuid;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\ManufacturerRepository")
@@ -16,6 +17,11 @@ class Manufacturer
      * @ORM\Column(type="string", nullable=false)
      */
     private $name;
+
+    public function __construct()
+    {
+        $this->id = Uuid::uuid4();
+    }
 
     public function getName(): string
     {
