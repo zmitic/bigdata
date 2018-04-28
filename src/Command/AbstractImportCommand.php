@@ -9,7 +9,7 @@ use Symfony\Component\Console\Command\Command;
 
 abstract class AbstractImportCommand extends Command
 {
-    protected $batchSize = 6000;
+    protected $batchSize = 5000;
 
     /** @var EntityManagerInterface */
     protected $em;

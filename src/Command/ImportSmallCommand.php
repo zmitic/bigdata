@@ -70,14 +70,14 @@ class ImportSmallCommand extends AbstractImportCommand
 
     private function getBuilders()
     {
-        yield [100000, 'categories', function (int $iteration) {
+        yield [1000, 'categories', function (int $iteration) {
             $category = new Category();
             $category->setName(sprintf('Category_%d', $iteration));
 
             return $category;
         }];
 
-        yield [100000, 'manufacturers', function (int $iteration) {
+        yield [10000, 'manufacturers', function (int $iteration) {
             $manufacturer = new Manufacturer();
             $manufacturer->setName(sprintf('Manufacturer_%d', $iteration));
 
@@ -103,7 +103,7 @@ class ImportSmallCommand extends AbstractImportCommand
             return $product;
         }];
 
-        yield [self::NR_OF_ORDERS, 'orders', function (int $iteration, Storage $storage) {
+        yield [100000000, 'orders', function (int $iteration, Storage $storage) {
             return new Order();
         }];
 
