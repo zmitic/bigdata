@@ -1,21 +1,22 @@
 <?php
 
-namespace App\Entity;
+namespace App\Model;
 
-use Doctrine\ORM\Mapping as ORM;
-use FOS\UserBundle\Model\User as BaseUser;
+use Ramsey\Uuid\Uuid;
 
-/**
- * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
- * @ORM\Table(name="tbl_user")
- */
-class User extends BaseUser
+trait IdentifiableTrait
 {
     /**
+     * @var Uuid
      * @ORM\Id
      * @ORM\Column(type="uuid_binary_ordered_time", unique=true)
      * @ORM\GeneratedValue(strategy="CUSTOM")
      * @ORM\CustomIdGenerator(class="Ramsey\Uuid\Doctrine\UuidOrderedTimeGenerator"))
      */
     protected $id;
+
+    public function getId(): Uuid
+    {
+        return $this->id;
+    }
 }

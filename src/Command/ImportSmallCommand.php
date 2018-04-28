@@ -4,10 +4,12 @@ namespace App\Command;
 
 use App\Entity\Manufacturer;
 use App\Entity\Product;
-use Symfony\Component\Console\Helper\ProgressBar;
+use App\Helper\Storage;
+use App\Model\IdentifiableTrait;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
+use Symfony\Component\Stopwatch\Stopwatch;
 
 class ImportSmallCommand extends AbstractImportCommand
 {
@@ -17,8 +19,6 @@ class ImportSmallCommand extends AbstractImportCommand
     {
         $this
             ->setDescription('Import small amount of data')
-//            ->addArgument('arg1', InputArgument::OPTIONAL, 'Argument description')
-//            ->addOption('option1', null, InputOption::VALUE_NONE, 'Option description')
         ;
     }
 
@@ -32,56 +32,75 @@ class ImportSmallCommand extends AbstractImportCommand
 
     private function bulkInsert(SymfonyStyle $io): void
     {
+        $storage = new Storage();
         foreach ($this->getBuilders() as $config) {
-            [$limit, $message, $builder] = $config;
-            $progressBar = $io->createProgressBar($limit);
-            $this->persistFromCallable($progressBar, $limit, $builder);
-            $io->success($message);
+            $this->persistFromCallable($io, $config, $storage);
         }
+        $io->success('All done');
     }
 
-    private function getBuilders()
+    private function persistFromCallable(SymfonyStyle $io, array $config, Storage $storage): void
     {
-        yield [1000000, 'Manufacturers created', function (int $iteration) {
-            $manufacturer = new Manufacturer();
-            $manufacturer->setName(sprintf('Manufacturer_%d', $iteration));
+        [$limit, $key, $builder] = $config;
+        $batchSize = $this->batchSize;
+        $storage->create($key, 1000);
 
-            return $manufacturer;
-        }];
+        $stopWatch = new Stopwatch();
+        $stopWatch->start($key);
 
-        yield [10, 'Products created', function (int $iteration) {
-            $product = new Product();
-            $product->setName(sprintf('Product_%d', $iteration));
-
-            return $product;
-        }];
-    }
-
-    private function persistFromCallable(ProgressBar $progressBar, int $limit, callable $builder): void
-    {
+        $progressBar = $this->createProgressBar($io, $key, $limit);
         $count = 0;
         $em = $this->em;
-        $results = $this->createGenerator($limit, $builder);
-        foreach ($results as $manufacturer) {
-            $em->persist($manufacturer);
+
+        /** @var IdentifiableTrait[] $entities */
+        $entities = $this->createGenerator($limit, $builder, $storage);
+        foreach ($entities as $entity) {
+            $em->persist($entity);
+            $storage->store($key, (string)$entity->getId());
             $count++;
-            if (($count % $this->batchSize) === 0) {
+            if (($count % $batchSize) === 0) {
                 $em->flush();
                 $em->clear();
-                $progressBar->advance($this->batchSize);
+                $event = $stopWatch->lap($key);
+                $duration = $event->getDuration();
+                $speed = round($count / $duration * 1000);
+                $progressBar->advance($batchSize);
+                $progressBar->setMessage(sprintf('Speed %d/sec', $speed), 'speed');
             }
         }
 
         $em->flush();
         $em->clear();
         $progressBar->finish();
+        $progressBar->clear();
     }
 
-    private function createGenerator(int $limit, callable $builder): \Generator
+    private function createGenerator(int $limit, callable $builder, Storage $storage): \Generator
     {
         for ($i = 1; $i <= $limit; $i++) {
-            yield $builder($i);
+            yield $builder($i, $storage);
         }
+    }
+
+    private function getBuilders()
+    {
+        yield [100, 'manufacturers', function (int $iteration) {
+            $manufacturer = new Manufacturer();
+            $manufacturer->setName(sprintf('Manufacturer_%d', $iteration));
+
+            return $manufacturer;
+        }];
+
+        yield [100000000, 'products', function (int $iteration, Storage $storage) {
+            $randomId = $storage->getRandom('manufacturers');
+            /** @var Manufacturer $manufacturer */
+            $manufacturer = $this->em->getReference(Manufacturer::class, $randomId);
+            $product = new Product();
+            $product->setName(sprintf('Product_%d', $iteration));
+            $product->setManufacturer($manufacturer);
+
+            return $product;
+        }];
     }
 }
 

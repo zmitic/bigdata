@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\Model\IdentifiableTrait;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -11,13 +12,7 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Category
 {
-    /**
-     * @ORM\Id
-     * @ORM\Column(type="uuid", unique=true)
-     * @ORM\GeneratedValue(strategy="CUSTOM")
-     * @ORM\CustomIdGenerator(class="Ramsey\Uuid\Doctrine\UuidGenerator"))
-     */
-    private $id;
+    use IdentifiableTrait;
 
     /**
      * @ORM\Column(type="string", nullable=false)
@@ -38,11 +33,6 @@ class Category
     public function __toString()
     {
         return (string)$this->name;
-    }
-
-    public function getId()
-    {
-        return $this->id;
     }
 
     public function getName(): string

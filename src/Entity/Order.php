@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\Model\IdentifiableTrait;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -11,13 +12,7 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Order
 {
-    /**
-     * @ORM\Id
-     * @ORM\Column(type="uuid", unique=true)
-     * @ORM\GeneratedValue(strategy="CUSTOM")
-     * @ORM\CustomIdGenerator(class="Ramsey\Uuid\Doctrine\UuidGenerator"))
-     */
-    private $id;
+    use IdentifiableTrait;
 
     /**
      * @var Product[]|ArrayCollection
@@ -30,11 +25,6 @@ class Order
     public function __construct()
     {
         $this->products = new ArrayCollection();
-    }
-
-    public function getId()
-    {
-        return $this->id;
     }
 
     /**
