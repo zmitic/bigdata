@@ -3,10 +3,8 @@
 namespace App\Entity;
 
 use App\Model\IdentifiableTrait;
-use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
-use Ramsey\Uuid\Uuid;
 
 /**
  * @ORM\Entity()
@@ -36,7 +34,6 @@ class OrderItem
         $this->order = $order;
         $this->product = $product;
         $this->quantity = $quantity;
-        $this->id = Uuid::uuid4();
     }
 
     public function getProduct(): Product

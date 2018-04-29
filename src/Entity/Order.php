@@ -6,7 +6,6 @@ use App\Model\IdentifiableTrait;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
-use Ramsey\Uuid\Uuid;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\OrderRepository")
@@ -25,7 +24,6 @@ class Order
     public function __construct()
     {
         $this->items = new ArrayCollection();
-        $this->id = Uuid::uuid4();
     }
 
     /** @return OrderItem[] */

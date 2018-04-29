@@ -2,16 +2,18 @@
 
 namespace App\Model;
 
+use Doctrine\ORM\Mapping as ORM;
 use Ramsey\Uuid\Uuid;
 
 trait IdentifiableTrait
 {
     /**
-     * @var Uuid
      * @ORM\Id
-     * @ORM\Column(type="uuid_binary_ordered_time", unique=true)
-     * @ORM\GeneratedValue(strategy="CUSTOM")
-     * @ORM\CustomIdGenerator(class="Ramsey\Uuid\Doctrine\UuidOrderedTimeGenerator"))
+     * @ORM\Column(type="integer")
+     * @ORM\GeneratedValue()
+     * ORM\Column(type="uuid_binary_ordered_time", unique=true)
+     * ORM\GeneratedValue(strategy="CUSTOM")
+     * ORM\CustomIdGenerator(class="Ramsey\Uuid\Doctrine\UuidOrderedTimeGenerator"))
      */
     protected $id;
 

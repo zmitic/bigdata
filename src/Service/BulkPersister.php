@@ -52,7 +52,7 @@ class BulkPersister
             $count++;
             $this->persistEntity($entity, $flushed, $flushTrigger);
 
-            if ($count % 50 === 0) {
+            if (($count % 50) === 0) {
                 $this->callOnFlush($onFlush, $flushed, $count);
             }
             if ($flushTrigger >= $batchSize) {
