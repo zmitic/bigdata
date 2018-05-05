@@ -13,9 +13,8 @@ class StopwatchProgressBar
 
     /** @var ProgressBar */
     private $progressBar;
-    /**
-     * @var string
-     */
+
+    /** @var string  */
     private $key;
 
     public function __construct(SymfonyStyle $io, string $key, int $limit)

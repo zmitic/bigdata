@@ -4,6 +4,7 @@ namespace App\Command;
 
 use App\Helper\Storage;
 use App\Service\BulkPersister;
+use App\Service\SQLImporter;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Command\Command;
 
@@ -19,12 +20,16 @@ abstract class AbstractImportCommand extends Command
     /** @var BulkPersister */
     protected $bulkPersister;
 
-    public function __construct(EntityManagerInterface $em, BulkPersister $bulkPersister)
+    /** @var SQLImporter */
+    protected $sqlImporter;
+
+    public function __construct(EntityManagerInterface $em, BulkPersister $bulkPersister, SQLImporter $importer)
     {
         $this->em = $em;
         $this->storage = new Storage();
-        parent::__construct();
         $this->bulkPersister = $bulkPersister;
+        $this->sqlImporter = $importer;
+        parent::__construct();
     }
 
     protected function warmup(): void

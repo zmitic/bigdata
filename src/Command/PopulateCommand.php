@@ -23,7 +23,14 @@ class PopulateCommand extends AbstractImportCommand
         $io = new SymfonyStyle($input, $output);
         $this->em->getConnection()->getConfiguration()->setSQLLogger(null);
         $this->truncateDb();
-        $this->bulkInsert($io);
+        $this->bulkInsert2($io);
+    }
+
+    public function bulkInsert2(SymfonyStyle $io): void
+    {
+        $this->warmup();
+        $this->sqlImporter->import($io);
+        $this->cleanup();
     }
 
     private function bulkInsert(SymfonyStyle $io): void
