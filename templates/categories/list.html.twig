@@ -1,12 +1,18 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
+<table>
+    <tr>
+        <th class="sort {{ pager.direction }}">{{ knp_pagination_sortable(pager, 'Name', 'o.name') }} {{ pager.direction }}</th>
+    </tr>
 
-    <ul>
-        {% for category in categories %}
-            <li>{{ category }}</li>
-        {% endfor %}
-    </ul>
+    {% for category in pager %}
+        <tr>
+            <td>{{ category }}</td>
+        </tr>
+    {% endfor %}
+</table>
 
-    {{ knp_pagination_render(categories) }}
+
+    {{ knp_pagination_render(pager) }}
 {% endblock %}

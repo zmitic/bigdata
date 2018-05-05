@@ -16,14 +16,14 @@ class CategoriesController extends Controller
     public function index(CategoryRepository $repo, Request $request): Response
     {
         $pager = $repo->paginate($request->query->get('page'), null,
-            $repo->andX(
+            $repo->orX(
                 $repo->whereName('Category_0979'),
-                $repo->whereId('00560eba-8b38-45c2-92f1-cb969ac812fb')
+                $repo->whereName('Category_0001')
             )
         );
 
         return $this->render('categories/list.html.twig', [
-            'categories' => $pager,
+            'pager' => $pager,
         ]);
     }
 }

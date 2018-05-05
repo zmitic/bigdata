@@ -5,6 +5,7 @@ namespace App\Model;
 use App\DependencyInjection\Compiler\RepositoriesPass;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Collections\Criteria;
+use Knp\Bundle\PaginatorBundle\Pagination\SlidingPagination;
 use Knp\Component\Pager\PaginatorInterface;
 use Doctrine\Common\Collections\Expr\Expression;
 use Knp\Component\Pager\Pagination\PaginationInterface;
@@ -22,6 +23,9 @@ abstract class BaseRepository extends ServiceEntityRepository
         $this->paginator = $paginator;
     }
 
+    /**
+     * @return PaginationInterface|SlidingPagination
+     */
     public function paginate($page, $limit, ?Expression ...$expressions): PaginationInterface
     {
         $page = $page ?: 1;
