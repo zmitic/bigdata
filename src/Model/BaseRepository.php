@@ -23,9 +23,7 @@ abstract class BaseRepository extends ServiceEntityRepository
         $this->paginator = $paginator;
     }
 
-    /**
-     * @return PaginationInterface|SlidingPagination
-     */
+    /** @return PaginationInterface|SlidingPagination */
     public function paginate($page, $limit, ?Expression ...$expressions): PaginationInterface
     {
         $page = $page ?: 1;
