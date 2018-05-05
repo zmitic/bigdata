@@ -20,23 +20,19 @@ class Product
     private $name;
 
     /**
-     * @var Manufacturer|null
-     *
      * @ORM\ManyToOne(targetEntity="App\Entity\Manufacturer")
      * @ORM\JoinColumn(onDelete="CASCADE")
      */
     private $manufacturer;
 
     /**
-     * @var Category[] | ArrayCollection
-     * @ORM\ManyToMany(targetEntity="App\Entity\Category", inversedBy="products", fetch="EXTRA_LAZY")
-     * @ORM\JoinTable(name="tbl_category_product")
+     * @ORM\OneToMany(targetEntity="App\Entity\ProductCategoryReference", mappedBy="product")
      */
-    private $categories;
+    private $categoryReferences;
 
     public function __construct()
     {
-        $this->categories = new ArrayCollection();
+        $this->categoryReferences = new ArrayCollection();
     }
 
     public function __toString()
@@ -64,29 +60,11 @@ class Product
         $this->manufacturer = $manufacturer;
     }
 
-    /**
-     * @return Category[]
-     */
+    /** @return Category[] */
     public function getCategories(): array
     {
-        return $this->categories->toArray();
-    }
-
-    public function addCategory(Category $category): void
-    {
-        if ($this->categories->contains($category)) {
-            return;
-        }
-        $this->categories->add($category);
-        $category->addProduct($this);
-    }
-
-    public function removeCategory(Category $category): void
-    {
-        if (!$this->categories->contains($category)) {
-            return;
-        }
-        $this->categories->removeElement($category);
-        $category->removeProduct($this);
+        return array_map(function (ProductCategoryReference $reference) {
+            return $reference->getCategory();
+        }, $this->categoryReferences->toArray());
     }
 }

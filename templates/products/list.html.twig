@@ -4,11 +4,14 @@
 <table>
     <tr>
         <th class="sort {{ pager.direction }}">{{ knp_pagination_sortable(pager, 'Name', 'o.name') }} {{ pager.direction }}</th>
+        <th>Categories</th>
     </tr>
 
-    {% for category in pager %}
+    {# @var product \App\Entity\Product #}
+    {% for product in pager %}
         <tr>
-            <td>{{ category }}</td>
+            <td>{{ product }}</td>
+            <td>{% for category in product.categories %}{{ category }}{% endfor %}</td>
         </tr>
     {% endfor %}
 </table>

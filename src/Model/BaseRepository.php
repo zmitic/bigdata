@@ -30,10 +30,23 @@ abstract class BaseRepository extends ServiceEntityRepository
         $limit = $limit ?: 10;
         $criteria = Criteria::create();
         $expressions = $this->cleanExpressions(...$expressions);
-        $criteria->andWhere(Criteria::expr()->andX(...$expressions));
+        if ($expressions) {
+            $criteria->andWhere(Criteria::expr()->andX(...$expressions));
+        }
         $qb = $this->createQueryBuilder('o')->addCriteria($criteria);
 
         return $this->paginator->paginate($qb, $page, $limit);
+    }
+
+    public function getResults(?Expression ...$expressions): array
+    {
+        $criteria = Criteria::create();
+        $expressions = $this->cleanExpressions(...$expressions);
+        if ($expressions) {
+            $criteria->andWhere(Criteria::expr()->andX(...$expressions));
+        }
+
+        return $this->matching($criteria)->toArray();
     }
 
     public function orX(?Expression ...$expressions): ?Expression
@@ -48,6 +61,16 @@ abstract class BaseRepository extends ServiceEntityRepository
         $clean = $this->cleanExpressions(...$expressions);
 
         return Criteria::expr()->andX(...$clean);
+    }
+
+    public function whereId(string $id): ?Expression
+    {
+        return Criteria::expr()->eq('id', $id);
+    }
+
+    public function whereIds(array $ids): ?Expression
+    {
+        return Criteria::expr()->in('id', $ids);
     }
 
     private function cleanExpressions(?Expression ...$expressions): array

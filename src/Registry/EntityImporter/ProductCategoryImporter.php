@@ -2,13 +2,14 @@
 
 namespace App\Registry\EntityImporter;
 
-use App\Entity\Manufacturer;
+use App\Entity\Category;
+use App\Entity\ProductCategoryReference;
 use App\Helper\Storage;
 use App\Entity\Product;
 use App\Model\Importer\EntityImporterInterface;
 use Doctrine\ORM\EntityManagerInterface;
 
-class ProductsImporter implements EntityImporterInterface
+class ProductCategoryImporter implements EntityImporterInterface
 {
     /** @var EntityManagerInterface */
     private $em;
@@ -20,7 +21,7 @@ class ProductsImporter implements EntityImporterInterface
 
     public function getOrder(): int
     {
-        return 3;
+        return 5;
     }
 
     public function getTotal(): int
@@ -30,19 +31,19 @@ class ProductsImporter implements EntityImporterInterface
 
     public function getName(): string
     {
-        return 'products';
+        return 'products_categories';
     }
 
     public function getEntities(Storage $storage): iterable
     {
         $total = $this->getTotal();
         for ($i = 0; $i < $total; ++$i) {
-            /** @var Manufacturer $manufacturer */
-            $manufacturer = $this->em->getReference(Manufacturer::class, $storage->getOneByRandom('manufacturers'));
-            $product = new Product();
-            $product->setManufacturer($manufacturer);
-            $product->setName(sprintf('Product_%07d', random_int(1, $total)));
-            yield $product;
+            /** @var Product $product */
+            $product = $this->em->getReference(Product::class, $storage->getOneByRandom('products'));
+            /** @var Category $category */
+            $category = $this->em->getReference(Category::class, $storage->getOneByRandom('categories'));
+            $reference = new ProductCategoryReference($product, $category);
+            yield $reference;
         }
     }
 }

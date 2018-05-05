@@ -19,9 +19,4 @@ class CategoryRepository extends BaseRepository
     {
         return Criteria::expr()->eq('name', $name);
     }
-
-    public function whereId(string $id): ?Expression
-    {
-        return Criteria::expr()->eq('id', $id);
-    }
 }
