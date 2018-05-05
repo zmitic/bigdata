@@ -9,7 +9,7 @@ class Storage
 
     public function store(string $key, $ids): void
     {
-        $store = $this->storage[$key];
+        $store = $this->getStore($key);
         foreach ((array) $ids as $id) {
             $store->put($id);
         }
@@ -32,6 +32,9 @@ class Storage
 
     public function create(string $key, int $limit): void
     {
+        if (isset($this->storage[$key])) {
+            throw new \InvalidArgumentException(sprintf('Storage "%s" already created.', $key));
+        }
         $this->storage[$key] = new Store($limit);
     }
 
