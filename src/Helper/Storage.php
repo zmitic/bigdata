@@ -10,7 +10,7 @@ class Storage
     public function store(string $key, $ids): void
     {
         $store = $this->storage[$key];
-        foreach ((array)$ids as $id) {
+        foreach ((array) $ids as $id) {
             $store->put($id);
         }
     }

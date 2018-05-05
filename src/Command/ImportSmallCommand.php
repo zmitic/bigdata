@@ -53,8 +53,8 @@ class ImportSmallCommand extends AbstractImportCommand
         $progressBar = new StopwatchProgressBar($io, $key, $limit);
         $this->bulkPersister->persist($entities, $batchSize, function ($entities, $count) use ($progressBar, $key, $storage) {
             $progressBar->setProgress($count);
-            foreach ((array)$entities as $entity) {
-                $storage->store($key, (string)$entity->getId());
+            foreach ((array) $entities as $entity) {
+                $storage->store($key, (string) $entity->getId());
             }
         });
         $progressBar->clear();
@@ -62,7 +62,7 @@ class ImportSmallCommand extends AbstractImportCommand
 
     private function generateEntities(int $limit, callable $builder, Storage $storage): \Generator
     {
-        for ($i = 1; $i <= $limit; $i++) {
+        for ($i = 1; $i <= $limit; ++$i) {
             $result = $builder($i, $storage);
             yield $result;
         }
@@ -124,4 +124,3 @@ class ImportSmallCommand extends AbstractImportCommand
         }];
     }
 }
-

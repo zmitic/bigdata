@@ -22,7 +22,7 @@ class BulkPersister
     {
         $count = 0;
         $cloned = $this->cloneQb($qb, $batchSize);
-        /** @var IdentifiableTrait[] $results */
+        /* @var IdentifiableTrait[] $results */
         while (true) {
             $results = $cloned->getQuery()->getResult();
             if (empty($results)) {
@@ -49,10 +49,10 @@ class BulkPersister
         $flushed = [];
 
         foreach ($entities as $entity) {
-            $count++;
+            ++$count;
             $this->persistEntity($entity, $flushed, $flushTrigger);
 
-            if (($count % 50) === 0) {
+            if (0 === ($count % 50)) {
                 $this->callOnFlush($onFlush, $flushed, $count);
             }
             if ($flushTrigger >= $batchSize) {
@@ -74,12 +74,12 @@ class BulkPersister
             foreach ($entity as $item) {
                 $this->em->persist($item);
                 $flushed[] = $item;
-                $flushTrigger ++;
+                ++$flushTrigger;
             }
         } else {
             $this->em->persist($entity);
             $flushed[] = $entity;
-            $flushTrigger ++;
+            ++$flushTrigger;
         }
     }
 

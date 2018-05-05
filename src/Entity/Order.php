@@ -51,4 +51,3 @@ class Order
         $this->items->add($item);
     }
 }
-

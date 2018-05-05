@@ -32,7 +32,7 @@ class Category
 
     public function __toString()
     {
-        return (string)$this->name;
+        return (string) $this->name;
     }
 
     public function getName(): string
@@ -71,4 +71,3 @@ class Category
         $product->removeCategory($this);
     }
 }
-

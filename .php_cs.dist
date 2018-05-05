@@ -1,0 +1,25 @@
+<?php
+
+return PhpCsFixer\Config::create()
+    ->setRules([
+        '@Symfony' => true,
+        'yoda_style' => ['equal' => false],
+    ])
+    ->setFinder(PhpCsFixer\Finder::create()
+        ->exclude('vendor')
+        ->in('src')
+    )
+;
+
+/*
+This document has been generated with
+https://mlocati.github.io/php-cs-fixer-configurator/
+you can change this configuration by importing this YAML code:
+
+fixerSets:
+  - '@Symfony'
+fixers:
+  yoda_style:
+    equal: false
+
+*/

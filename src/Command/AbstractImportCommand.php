@@ -27,6 +27,16 @@ abstract class AbstractImportCommand extends Command
         $this->bulkPersister = $bulkPersister;
     }
 
+    protected function warmup(): void
+    {
+        $this->executeSql('SET FOREIGN_KEY_CHECKS = 0;SET unique_checks=0;SET autocommit=0;');
+    }
+
+    protected function cleanup(): void
+    {
+        $this->executeSql('SET FOREIGN_KEY_CHECKS = 1;SET unique_checks=1;SET autocommit=1;');
+    }
+
     protected function truncateDb(): void
     {
         $rawSql = '
@@ -40,9 +50,12 @@ truncate table tbl_product;
 truncate table tbl_user;
 SET FOREIGN_KEY_CHECKS = 1;
         ';
+        $this->executeSql($rawSql);
+    }
 
-        $statement = $this->em->getConnection()->prepare($rawSql);
+    protected function executeSql(string $sql): void
+    {
+        $statement = $this->em->getConnection()->prepare($sql);
         $statement->execute();
     }
 }
-

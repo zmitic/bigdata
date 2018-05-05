@@ -21,7 +21,7 @@ class Store
             return;
         }
         $this->data[] = $id;
-        $this->size++;
+        ++$this->size;
     }
 
     public function getAll(): array
@@ -44,7 +44,7 @@ class Store
     public function getRandom($limit): array
     {
         $results = [];
-        $keys = (array)array_rand($this->data, $limit);
+        $keys = (array) array_rand($this->data, $limit);
         foreach ($keys as $key) {
             $results[] = $this->data[$key];
         }

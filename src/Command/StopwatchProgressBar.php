@@ -8,8 +8,7 @@ use Symfony\Component\Stopwatch\Stopwatch;
 
 class StopwatchProgressBar
 {
-
-    /** @var Stopwatch  */
+    /** @var Stopwatch */
     private $stopWatch;
 
     /** @var ProgressBar */
@@ -26,6 +25,11 @@ class StopwatchProgressBar
         $this->stopWatch->start($key);
         $this->key = $key;
         $this->setProgress(10);
+    }
+
+    public function __destruct()
+    {
+        $this->progressBar->clear();
     }
 
     public function setProgress(int $progress): void
@@ -63,7 +67,7 @@ class StopwatchProgressBar
         ];
 
         $progressBar->setFormat(implode("\n", $formats));
-        $progressBar->setRedrawFrequency(200);
+        $progressBar->setRedrawFrequency(5000);
 
         $this->progressBar = $progressBar;
     }

@@ -27,4 +27,3 @@ class Manufacturer
         $this->name = $name;
     }
 }
-
