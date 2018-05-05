@@ -2,7 +2,7 @@
 
 namespace App\Service;
 
-use App\Command\StopwatchProgressBar;
+use App\Helper\StopwatchProgressBar;
 use App\Model\Importer\EntityImporterInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;

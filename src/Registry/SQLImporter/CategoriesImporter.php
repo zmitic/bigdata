@@ -9,7 +9,7 @@ class CategoriesImporter implements EntityImporterInterface
 {
     public function getTotal(): int
     {
-        return 100000;
+        return 1000000;
     }
 
     public function getKey(): string
@@ -19,9 +19,10 @@ class CategoriesImporter implements EntityImporterInterface
 
     public function getEntities(): iterable
     {
-        for ($i = 0; $i < $this->getTotal(); ++$i) {
+        $total = $this->getTotal();
+        for ($i = 0; $i < $total; ++$i) {
             $category = new Category();
-            $category->setName(random_int(1, 10000));
+            $category->setName('Categoy_'.random_int(1, $total));
             yield $category;
         }
     }

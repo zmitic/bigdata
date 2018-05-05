@@ -2,13 +2,30 @@
 
 namespace App\Command;
 
+use App\Service\SQLImporter;
+use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\Mapping\ClassMetadata;
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
-class PopulateCommand extends AbstractImportCommand
+class PopulateCommand extends Command
 {
     protected static $defaultName = 'app:populate';
+
+    /** @var EntityManagerInterface */
+    private $em;
+
+    /** @var SQLImporter */
+    private $sqlImporter;
+
+    public function __construct(EntityManagerInterface $em, SQLImporter $sqlImporter)
+    {
+        parent::__construct();
+        $this->em = $em;
+        $this->sqlImporter = $sqlImporter;
+    }
 
     protected function configure(): void
     {
@@ -19,15 +36,29 @@ class PopulateCommand extends AbstractImportCommand
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $io = new SymfonyStyle($input, $output);
+        $io->write(sprintf("\033\143"));
         $this->em->getConnection()->getConfiguration()->setSQLLogger(null);
-        $this->truncateDb();
-        $this->bulkInsert($io);
+        $io->caution('Truncating all tables...');
+        $io->write(sprintf("\033\143"));
+        $this->truncateAllTables();
+        $this->sqlImporter->import($io);
     }
 
-    public function bulkInsert(SymfonyStyle $io): void
+    private function truncateAllTables(): void
     {
-//        $this->warmup();
-        $this->sqlImporter->import($io);
-        $this->cleanup();
+        $tables = [];
+        /** @var ClassMetadata[] $allMetadata */
+        $allMetadata = $this->em->getMetadataFactory()->getAllMetadata();
+        foreach ($allMetadata as $metadata) {
+            $tables[] = $metadata->table['name'];
+        }
+
+        $sql = 'SET FOREIGN_KEY_CHECKS = 0;';
+        foreach ($tables as $table) {
+            $sql .= sprintf('truncate table %s;', $table);
+        }
+        $sql .= 'SET FOREIGN_KEY_CHECKS = 1;';
+
+        $this->em->getConnection()->exec($sql);
     }
 }
