@@ -3,13 +3,13 @@
 namespace App\Service;
 
 use App\Command\StopwatchProgressBar;
-use App\Model\Importer\SQLImporterInterface;
+use App\Model\Importer\EntityImporterInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
 class SQLImporter
 {
-    /** @var SQLImporterInterface[] */
+    /** @var EntityImporterInterface[] */
     private $sqlImporters;
 
     /** @var EntityManagerInterface */
@@ -21,55 +21,62 @@ class SQLImporter
         $this->em = $em;
     }
 
+    /**
+     * In case of early terminate, make sure DB is useful.
+     */
+    public function __destruct()
+    {
+        $this->cleanup();
+    }
+
     public function import(SymfonyStyle $io): void
     {
+        $this->warmup();
         foreach ($this->sqlImporters as $importer) {
             $this->importOne($importer, $io);
         }
     }
 
-    private function importOne(SQLImporterInterface $importer, SymfonyStyle $io): void
+    private function importOne(EntityImporterInterface $importer, SymfonyStyle $io): void
     {
         $total = $importer->getTotal();
         $key = $importer->getKey();
         $progressBar = new StopwatchProgressBar($io, $key, $total);
 
-        $entityClass = $importer->getEntityClass();
-        $metaData = $this->em->getClassMetadata($entityClass);
-        $tableName = $metaData->table['name'];
-
-        $sql = sprintf('INSERT INTO %s (%s) VALUES ', $tableName, implode(', ', $importer->getColumnNames()));
-
         $count = 0;
-        $processed = [];
-        foreach ($importer->getValues() as $key => $columnValues) {
-            $progressBar->setProgress($key);
-            $processed[] = $this->valueToString($columnValues);
-            $count++;
+        $stored = [];
+        foreach ($importer->getEntities() as $key => $entity) {
+            $stored[] = $entity;
+            ++$count;
             if ($count >= 200) {
-                $this->insert($sql, $processed);
+                $progressBar->setProgress($key);
+                $this->flushEntities($stored);
                 $count = 0;
-                $processed = [];
+                $stored = [];
             }
         }
-        $this->insert($sql, $processed);
+        $this->flushEntities($stored);
     }
 
-    private function insert(string $sql, array $processed): void
+    private function flushEntities(array $entities): void
     {
-        if (empty($processed)) {
+        if (empty($entities)) {
             return;
         }
-        $statement = sprintf('SET FOREIGN_KEY_CHECKS = 0;SET unique_checks=0;SET autocommit=0;%s %s;', $sql, implode(', ', $processed));
-        $this->em->getConnection()->exec($statement);
+        foreach ($entities as $entity) {
+            $this->em->persist($entity);
+        }
+        $this->em->flush();
+        $this->em->clear();
     }
 
-    private function valueToString(array $values): string
+    protected function warmup(): void
     {
-        $processed = array_map(function (string $field) {
-            return sprintf('"%s"', $field);
-        }, $values);
+        $this->em->getConnection()->exec('SET FOREIGN_KEY_CHECKS = 0;SET unique_checks=0;SET autocommit=0;');
+    }
 
-        return sprintf('(%s)', implode(', ', $processed));
+    protected function cleanup(): void
+    {
+        $this->em->getConnection()->exec('SET FOREIGN_KEY_CHECKS = 1;SET unique_checks=1;SET autocommit=1;');
     }
 }

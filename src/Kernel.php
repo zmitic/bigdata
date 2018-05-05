@@ -2,7 +2,7 @@
 
 namespace App;
 
-use App\Model\Importer\SQLImporterInterface;
+use App\Model\Importer\EntityImporterInterface;
 use Symfony\Bundle\FrameworkBundle\Kernel\MicroKernelTrait;
 use Symfony\Component\Config\Loader\LoaderInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -37,7 +37,7 @@ class Kernel extends BaseKernel
 
     protected function build(ContainerBuilder $container): void
     {
-        $container->registerForAutoconfiguration(SQLImporterInterface::class)->addTag('app.sql_importer');
+        $container->registerForAutoconfiguration(EntityImporterInterface::class)->addTag('app.sql_importer');
     }
 
     protected function configureContainer(ContainerBuilder $container, LoaderInterface $loader)

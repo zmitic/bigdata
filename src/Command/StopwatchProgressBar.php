@@ -14,7 +14,7 @@ class StopwatchProgressBar
     /** @var ProgressBar */
     private $progressBar;
 
-    /** @var string  */
+    /** @var string */
     private $key;
 
     public function __construct(SymfonyStyle $io, string $key, int $limit)
@@ -66,7 +66,7 @@ class StopwatchProgressBar
         ];
 
         $progressBar->setFormat(implode("\n", $formats));
-        $progressBar->setRedrawFrequency(5000);
+        $progressBar->setRedrawFrequency(1000);
 
         $this->progressBar = $progressBar;
     }
