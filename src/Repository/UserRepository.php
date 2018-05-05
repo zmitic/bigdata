@@ -3,10 +3,10 @@
 namespace App\Repository;
 
 use App\Entity\User;
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use App\Model\BaseRepository;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
-class UserRepository extends ServiceEntityRepository
+class UserRepository extends BaseRepository
 {
     public function __construct(RegistryInterface $registry)
     {

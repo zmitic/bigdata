@@ -3,6 +3,7 @@
 namespace App;
 
 use App\DependencyInjection\Compiler\EntitiesImporterPass;
+use App\DependencyInjection\Compiler\RepositoriesPass;
 use App\Model\Importer\EntityImporterInterface;
 use Symfony\Bundle\FrameworkBundle\Kernel\MicroKernelTrait;
 use Symfony\Component\Config\Loader\LoaderInterface;
@@ -40,6 +41,7 @@ class Kernel extends BaseKernel
     {
         $container->registerForAutoconfiguration(EntityImporterInterface::class)->addTag('app.entity_importer');
         $container->addCompilerPass(new EntitiesImporterPass());
+        $container->addCompilerPass(new RepositoriesPass());
     }
 
     protected function configureContainer(ContainerBuilder $container, LoaderInterface $loader): void

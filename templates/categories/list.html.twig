@@ -1,0 +1,12 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+
+    <ul>
+        {% for category in categories %}
+            <li>{{ category }}</li>
+        {% endfor %}
+    </ul>
+
+    {{ knp_pagination_render(categories) }}
+{% endblock %}

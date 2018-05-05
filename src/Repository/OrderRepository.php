@@ -3,10 +3,10 @@
 namespace App\Repository;
 
 use App\Entity\Order;
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use App\Model\BaseRepository;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
-class OrderRepository extends ServiceEntityRepository
+class OrderRepository extends BaseRepository
 {
     public function __construct(RegistryInterface $registry)
     {
