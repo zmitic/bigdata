@@ -23,18 +23,9 @@ class EntitiesImporter
         $this->em = $em;
     }
 
-    /**
-     * In case of early terminate, make sure DB is useful.
-     */
-    public function __destruct()
-    {
-        $this->cleanup();
-    }
-
     public function import(SymfonyStyle $io): void
     {
         $storage = new Storage();
-//        $this->warmup();
         foreach ($this->getImporters() as $importer) {
             $this->importOne($importer, $io, $storage);
         }
@@ -80,16 +71,6 @@ class EntitiesImporter
             $storage->store($key, (string) $entity->getId());
         }
         $this->em->clear();
-    }
-
-    protected function warmup(): void
-    {
-        $this->em->getConnection()->exec('SET FOREIGN_KEY_CHECKS = 0;SET unique_checks=0;SET autocommit=0;');
-    }
-
-    protected function cleanup(): void
-    {
-        $this->em->getConnection()->exec('SET FOREIGN_KEY_CHECKS = 1;SET unique_checks=1;SET autocommit=1;');
     }
 
     private function getImporters(): array
