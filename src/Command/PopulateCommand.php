@@ -2,7 +2,7 @@
 
 namespace App\Command;
 
-use App\Service\SQLImporter;
+use App\Service\EntitiesImporter;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Mapping\ClassMetadata;
 use Symfony\Component\Console\Command\Command;
@@ -17,10 +17,10 @@ class PopulateCommand extends Command
     /** @var EntityManagerInterface */
     private $em;
 
-    /** @var SQLImporter */
+    /** @var EntitiesImporter */
     private $sqlImporter;
 
-    public function __construct(EntityManagerInterface $em, SQLImporter $sqlImporter)
+    public function __construct(EntityManagerInterface $em, EntitiesImporter $sqlImporter)
     {
         parent::__construct();
         $this->em = $em;

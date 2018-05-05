@@ -9,9 +9,9 @@ use App\Model\Importer\EntityImporterInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
-class SQLImporter
+class EntitiesImporter
 {
-    /** @var EntityImporterInterface[]|iterable */
+    /** @var EntityImporterInterface[]|\Generator */
     private $sqlImporters;
 
     /** @var EntityManagerInterface */
@@ -34,7 +34,7 @@ class SQLImporter
     public function import(SymfonyStyle $io): void
     {
         $storage = new Storage();
-        $this->warmup();
+//        $this->warmup();
         foreach ($this->getImporters() as $importer) {
             $this->importOne($importer, $io, $storage);
         }
@@ -53,13 +53,13 @@ class SQLImporter
         $entities = $importer->getEntities($storage);
         foreach ($entities as $key => $entity) {
             $stored[] = $entity;
-            ++$count;
-            if ($count >= 200) {
-                $progressBar->setProgress($key);
+            if ($count >= 3000) {
                 $this->flushEntities($stored, $name, $storage);
                 $count = 0;
                 $stored = [];
+                $progressBar->setProgress($key);
             }
+            ++$count;
         }
         $this->flushEntities($stored, $name, $storage);
     }
@@ -77,7 +77,7 @@ class SQLImporter
         }
         $this->em->flush();
         foreach ($entities as $entity) {
-            $storage->store($key, (string)$entity->getId());
+            $storage->store($key, (string) $entity->getId());
         }
         $this->em->clear();
     }

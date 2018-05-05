@@ -37,7 +37,7 @@ class Kernel extends BaseKernel
 
     protected function build(ContainerBuilder $container): void
     {
-        $container->registerForAutoconfiguration(EntityImporterInterface::class)->addTag('app.sql_importer');
+        $container->registerForAutoconfiguration(EntityImporterInterface::class)->addTag('app.entity_importer');
     }
 
     protected function configureContainer(ContainerBuilder $container, LoaderInterface $loader)
