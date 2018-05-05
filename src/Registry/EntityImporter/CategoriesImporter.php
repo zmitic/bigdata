@@ -28,7 +28,7 @@ class CategoriesImporter implements EntityImporterInterface
         $total = $this->getTotal();
         for ($i = 0; $i < $total; ++$i) {
             $category = new Category();
-            $category->setName(sprintf('Category_%07d', random_int(1, $total)));
+            $category->setName(sprintf('Category_%04d', random_int(1, $total)));
             yield $category;
         }
     }

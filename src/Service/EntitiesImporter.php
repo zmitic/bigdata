@@ -2,6 +2,7 @@
 
 namespace App\Service;
 
+use App\DependencyInjection\Compiler\EntitiesImporterPass;
 use App\Helper\StopwatchProgressBar;
 use App\Helper\Storage;
 use App\Model\IdentifiableTrait;
@@ -9,15 +10,18 @@ use App\Model\Importer\EntityImporterInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
+/**
+ * @see EntitiesImporterPass
+ */
 class EntitiesImporter
 {
-    /** @var EntityImporterInterface[]|\Generator */
+    /** @var EntityImporterInterface[] */
     private $sqlImporters;
 
     /** @var EntityManagerInterface */
     private $em;
 
-    public function __construct(iterable $importers, EntityManagerInterface $em)
+    public function __construct(array $importers, EntityManagerInterface $em)
     {
         $this->sqlImporters = $importers;
         $this->em = $em;
@@ -42,13 +46,12 @@ class EntitiesImporter
         $stored = [];
         /** @var IdentifiableTrait[] $entities */
         $entities = $importer->getEntities($storage);
-        foreach ($entities as $key => $entity) {
+        foreach ($entities as $progress => $entity) {
             $stored[] = $entity;
-            if ($count >= 3000) {
+            if (0 === $count % 3000) {
                 $this->flushEntities($stored, $name, $storage);
-                $count = 0;
                 $stored = [];
-                $progressBar->setProgress($key);
+                $progressBar->setProgress($progress);
             }
             ++$count;
         }
@@ -75,7 +78,7 @@ class EntitiesImporter
 
     private function getImporters(): array
     {
-        $importers = iterator_to_array($this->sqlImporters);
+        $importers = $this->sqlImporters;
         usort($importers, function (EntityImporterInterface $a, EntityImporterInterface $b) {
             return $a->getOrder() <=> $b->getOrder();
         });
