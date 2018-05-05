@@ -2,7 +2,7 @@
 
 namespace App\Entity;
 
-use App\Model\IdentifiableTrait;
+use App\Model\IdentifiableEntityTrait;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
 
@@ -12,7 +12,7 @@ use Gedmo\Timestampable\Traits\TimestampableEntity;
  */
 class OrderItem
 {
-    use IdentifiableTrait;
+    use IdentifiableEntityTrait;
     use TimestampableEntity;
 
     /** @ORM\ManyToOne(targetEntity="App\Entity\Order", inversedBy="items") */

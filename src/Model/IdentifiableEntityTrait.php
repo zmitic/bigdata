@@ -5,7 +5,7 @@ namespace App\Model;
 use Doctrine\ORM\Mapping as ORM;
 use Ramsey\Uuid\Uuid;
 
-trait IdentifiableTrait
+trait IdentifiableEntityTrait
 {
     /**
      * @ORM\Id

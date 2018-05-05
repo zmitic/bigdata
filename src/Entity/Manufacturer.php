@@ -2,7 +2,7 @@
 
 namespace App\Entity;
 
-use App\Model\IdentifiableTrait;
+use App\Model\IdentifiableEntityTrait;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -11,7 +11,7 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Manufacturer
 {
-    use IdentifiableTrait;
+    use IdentifiableEntityTrait;
     /**
      * @ORM\Column(type="string", nullable=false)
      */

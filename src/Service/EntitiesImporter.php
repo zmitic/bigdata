@@ -5,7 +5,7 @@ namespace App\Service;
 use App\DependencyInjection\Compiler\EntitiesImporterPass;
 use App\Helper\StopwatchProgressBar;
 use App\Helper\Storage;
-use App\Model\IdentifiableTrait;
+use App\Model\IdentifiableEntityTrait;
 use App\Model\Importer\EntityImporterInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
@@ -16,14 +16,14 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 class EntitiesImporter
 {
     /** @var EntityImporterInterface[] */
-    private $sqlImporters;
+    private $importers;
 
     /** @var EntityManagerInterface */
     private $em;
 
     public function __construct(array $importers, EntityManagerInterface $em)
     {
-        $this->sqlImporters = $importers;
+        $this->importers = $importers;
         $this->em = $em;
     }
 
@@ -44,7 +44,7 @@ class EntitiesImporter
 
         $count = 0;
         $stored = [];
-        /** @var IdentifiableTrait[] $entities */
+        /** @var IdentifiableEntityTrait[] $entities */
         $entities = $importer->getEntities($storage);
         foreach ($entities as $progress => $entity) {
             $stored[] = $entity;
@@ -59,7 +59,7 @@ class EntitiesImporter
     }
 
     /**
-     * @param IdentifiableTrait[] $entities
+     * @param IdentifiableEntityTrait[] $entities
      */
     private function flushEntities(array $entities, string $key, Storage $storage): void
     {
@@ -78,7 +78,7 @@ class EntitiesImporter
 
     private function getImporters(): array
     {
-        $importers = $this->sqlImporters;
+        $importers = $this->importers;
         usort($importers, function (EntityImporterInterface $a, EntityImporterInterface $b) {
             return $a->getOrder() <=> $b->getOrder();
         });

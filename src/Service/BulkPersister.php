@@ -2,7 +2,7 @@
 
 namespace App\Service;
 
-use App\Model\IdentifiableTrait;
+use App\Model\IdentifiableEntityTrait;
 use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
@@ -22,7 +22,7 @@ class BulkPersister
     {
         $count = 0;
         $cloned = $this->cloneQb($qb, $batchSize);
-        /* @var IdentifiableTrait[] $results */
+        /* @var IdentifiableEntityTrait[] $results */
         while (true) {
             $results = $cloned->getQuery()->getResult();
             if (empty($results)) {
@@ -39,7 +39,7 @@ class BulkPersister
     }
 
     /**
-     * @param \Generator|IdentifiableTrait[] $entities
+     * @param \Generator|IdentifiableEntityTrait[] $entities
      */
     public function persist(iterable $entities, int $batchSize, callable $onFlush = null): void
     {

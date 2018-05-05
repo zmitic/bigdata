@@ -2,7 +2,7 @@
 
 namespace App\Entity;
 
-use App\Model\IdentifiableTrait;
+use App\Model\IdentifiableEntityTrait;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -12,7 +12,7 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Category
 {
-    use IdentifiableTrait;
+    use IdentifiableEntityTrait;
 
     /**
      * @ORM\Column(type="string", nullable=false)

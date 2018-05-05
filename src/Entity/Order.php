@@ -2,7 +2,7 @@
 
 namespace App\Entity;
 
-use App\Model\IdentifiableTrait;
+use App\Model\IdentifiableEntityTrait;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
@@ -13,7 +13,7 @@ use Gedmo\Timestampable\Traits\TimestampableEntity;
  */
 class Order
 {
-    use IdentifiableTrait;
+    use IdentifiableEntityTrait;
     use TimestampableEntity;
 
     /**
