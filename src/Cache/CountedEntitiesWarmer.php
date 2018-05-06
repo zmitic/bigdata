@@ -7,6 +7,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Mapping\ClassMetadata;
 use Symfony\Component\HttpKernel\CacheWarmer\CacheWarmer;
 use Doctrine\Common\Annotations\Reader;
+use function in_array;
 
 class CountedEntitiesWarmer extends CacheWarmer
 {
@@ -40,6 +41,9 @@ class CountedEntitiesWarmer extends CacheWarmer
             /** @var Counted $counted */
             $counted = $this->annotationReader->getClassAnnotation($reflection, Counted::class);
             if ($counted) {
+                if (in_array($counted->name, $cache, true)) {
+                    throw new \LogicException(sprintf('You have duplicate name for @Counted annotation: "%s".', $counted->name));
+                }
                 $cache[$metadata->rootEntityName] = $counted->name;
             }
         }
