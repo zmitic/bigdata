@@ -1,0 +1,9 @@
+
+<ul class="list-group">
+    {% for segment_name in segments %}
+        <li class="list-group-item" >
+            <a href="{{ path('admin_segment', {'segment': segment_name}) }}">{{ segment_name }}</a>
+        </li>
+    {% endfor %}
+</ul>
+

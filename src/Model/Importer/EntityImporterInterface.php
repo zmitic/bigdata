@@ -6,6 +6,8 @@ use App\Helper\Storage;
 
 interface EntityImporterInterface
 {
+    public const TAG = 'app.entity_importer';
+
     public function getOrder(): int;
 
     public function getTotal(): int;

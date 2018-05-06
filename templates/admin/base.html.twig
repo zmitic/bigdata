@@ -1,0 +1,16 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+
+    <div class="row">
+
+        <div class="col-4">
+            {{ render(controller('App\\Controller\\AdminController::navLeft')) }}
+        </div>
+
+        <div class="col-8">
+            {% block content %}Here be dragons!{% endblock %}
+        </div>
+    </div>
+
+{% endblock %}
