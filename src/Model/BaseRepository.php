@@ -33,7 +33,7 @@ abstract class BaseRepository extends ServiceEntityRepository
         if ($expressions) {
             $criteria->andWhere(Criteria::expr()->andX(...$expressions));
         }
-        $qb = $this->createQueryBuilder('o')->addCriteria($criteria)->getQuery()->setMaxResults(100);
+        $qb = $this->createQueryBuilder('o')->addCriteria($criteria);
 
         return $this->paginator->paginate($qb, $page, $limit);
     }
