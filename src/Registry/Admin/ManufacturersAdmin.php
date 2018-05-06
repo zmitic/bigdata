@@ -3,22 +3,22 @@
 namespace App\Registry\Admin;
 
 use App\Model\AdminInterface;
-use App\Repository\CategoryRepository;
+use App\Repository\ManufacturerRepository;
 use App\Service\Paginator\Pager;
 
-class CategoriesAdmin implements AdminInterface
+class ManufacturersAdmin implements AdminInterface
 {
-    /** @var CategoryRepository */
+    /** @var ManufacturerRepository */
     private $repository;
 
-    public function __construct(CategoryRepository $repository)
+    public function __construct(ManufacturerRepository $repository)
     {
         $this->repository = $repository;
     }
 
     public function getName(): string
     {
-        return 'categories';
+        return 'manufacturers';
     }
 
     public function getColumnsList(): array

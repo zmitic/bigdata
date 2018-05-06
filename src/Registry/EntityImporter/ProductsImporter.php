@@ -25,7 +25,7 @@ class ProductsImporter implements EntityImporterInterface
 
     public function getTotal(): int
     {
-        return 100000;
+        return 10000000;
     }
 
     public function getName(): string

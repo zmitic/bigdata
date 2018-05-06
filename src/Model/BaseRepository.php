@@ -3,31 +3,28 @@
 namespace App\Model;
 
 use App\DependencyInjection\Compiler\RepositoriesPass;
+use App\Service\Paginator\Pager;
+use App\Service\Paginator\Paginator;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Collections\Criteria;
-use Knp\Bundle\PaginatorBundle\Pagination\SlidingPagination;
-use Knp\Component\Pager\PaginatorInterface;
 use Doctrine\Common\Collections\Expr\Expression;
-use Knp\Component\Pager\Pagination\PaginationInterface;
 
 abstract class BaseRepository extends ServiceEntityRepository
 {
-    /** @var PaginatorInterface */
+    /** @var Paginator */
     protected $paginator;
 
-    /**
-     * @see RepositoriesPass
-     */
-    public function setPaginator(PaginatorInterface $paginator): void
+    /** @see RepositoriesPass */
+    public function setPaginator(Paginator $paginator): void
     {
         $this->paginator = $paginator;
     }
 
-    /** @return PaginationInterface|SlidingPagination */
-    public function paginate($page, $limit, ?Expression ...$expressions): PaginationInterface
+    public function paginate(int $page, ?int $limit, ?Expression ...$expressions): Pager
     {
-        $page = $page ?: 1;
-        $limit = $limit ?: 10;
+        $page = $page ?? 1;
+        $limit = $limit ?? 10;
+
         $criteria = Criteria::create();
         $expressions = $this->cleanExpressions(...$expressions);
         if ($expressions) {

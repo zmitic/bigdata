@@ -2,8 +2,7 @@
 
 namespace App\Model;
 
-use Knp\Bundle\PaginatorBundle\Pagination\SlidingPagination;
-use Knp\Component\Pager\Pagination\PaginationInterface;
+use App\Service\Paginator\Pager;
 
 interface AdminInterface
 {
@@ -13,6 +12,5 @@ interface AdminInterface
 
     public function getColumnsList(): array;
 
-    /** @return PaginationInterface|SlidingPagination */
-    public function getPager(int $page): SlidingPagination;
+    public function getPager(int $page): Pager;
 }

@@ -4,8 +4,7 @@ namespace App\Registry\Admin;
 
 use App\Model\AdminInterface;
 use App\Repository\ProductRepository;
-use Knp\Bundle\PaginatorBundle\Pagination\SlidingPagination;
-use Knp\Component\Pager\Pagination\PaginationInterface;
+use App\Service\Paginator\Pager;
 
 class ProductsAdmin implements AdminInterface
 {
@@ -27,8 +26,7 @@ class ProductsAdmin implements AdminInterface
         return ['name', 'manufacturer'];
     }
 
-    /** @return PaginationInterface|SlidingPagination */
-    public function getPager(int $page): SlidingPagination
+    public function getPager(int $page): Pager
     {
         return $this->repository->paginate($page, null);
     }

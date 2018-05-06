@@ -2,9 +2,10 @@
 
 namespace App\Service\EntitiesCounter;
 
+use App\Entity\Counter;
 use App\Repository\CounterRepository;
 
-class Counter
+class EntitiesCounter
 {
     /** @var CounterRepository */
     private $repository;
@@ -18,13 +19,13 @@ class Counter
         $this->storage = $storage;
     }
 
-    public function countForClassName(string $className): int
+    public function countForClassName(string $className): ?int
     {
         if (!$id = $this->storage->findIdForClassName($className)) {
-            throw new \InvalidArgumentException(sprintf('Class "%s" is not managed by counter. Use @Counted annotation and warmup the cache.', $className));
+            return null;
         }
 
-        /** @var \App\Entity\Counter $counter */
+        /** @var Counter $counter */
         $counter = $this->repository->find($id);
 
         return $counter->getCount();
