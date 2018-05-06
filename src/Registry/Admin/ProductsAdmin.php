@@ -24,7 +24,7 @@ class ProductsAdmin implements AdminInterface
 
     public function getColumnsList(): array
     {
-        return ['name'];
+        return ['name', 'manufacturer'];
     }
 
     /** @return PaginationInterface|SlidingPagination */

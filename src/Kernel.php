@@ -7,6 +7,7 @@ use App\DependencyInjection\Compiler\EntitiesImporterPass;
 use App\DependencyInjection\Compiler\RepositoriesPass;
 use App\Model\AdminInterface;
 use App\Model\Importer\EntityImporterInterface;
+use Doctrine\Common\EventSubscriber;
 use Symfony\Bundle\FrameworkBundle\Kernel\MicroKernelTrait;
 use Symfony\Component\Config\Loader\LoaderInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -50,6 +51,7 @@ class Kernel extends BaseKernel
 
     protected function configureContainer(ContainerBuilder $container, LoaderInterface $loader): void
     {
+        $container->registerForAutoconfiguration(EventSubscriber::class)->addTag('doctrine.event_subscriber');
         $container->setParameter('container.autowiring.strict_mode', true);
         $container->setParameter('container.dumper.inline_class_loader', true);
         $confDir = $this->getProjectDir().'/config';

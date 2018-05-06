@@ -7,6 +7,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
 
 class AdminController extends Controller
@@ -37,12 +38,17 @@ class AdminController extends Controller
         ]);
     }
 
-    public function navLeft(Admin $admin): Response
+    public function navLeft(Admin $admin, RequestStack $requestStack): Response
     {
+        $masterRequest = $requestStack->getMasterRequest();
+        if (!$masterRequest) {
+            throw new \LogicException('You must embed this action.');
+        }
         $segments = $admin->getSegmentNames();
 
         return $this->render('admin/navigation_left.html.twig', [
             'segments' => $segments,
+            'active' => $masterRequest->attributes->getAlpha('segment'),
         ]);
     }
 }

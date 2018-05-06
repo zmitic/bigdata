@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\Annotation\Counted;
 use App\Model\IdentifiableEntityTrait;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
@@ -9,6 +10,8 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * @ORM\Entity(repositoryClass="App\Repository\ProductRepository")
  * @ORM\Table(name="tbl_product")
+ *
+ * @Counted(name="product")
  */
 class Product
 {

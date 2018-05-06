@@ -6,6 +6,7 @@
             {% for column in columns %}
                 <th>{{ column }}</th>
             {% endfor %}
+            <th>Actions</th>
         </tr>
 
         <tbody>
@@ -16,6 +17,10 @@
                         {{ attribute(entity, column) }}
                     </td>
                 {% endfor %}
+                <td>
+                    Delete
+                    Edit
+                </td>
             </tr>
         {% endfor %}
         </tbody>

@@ -9,7 +9,7 @@ interface AdminInterface
 {
     public const TAG = 'app.admin';
 
-    public function getName(): string ;
+    public function getName(): string;
 
     public function getColumnsList(): array;
 
