@@ -15,7 +15,7 @@ class CategoriesImporter implements EntityImporterInterface
 
     public function getTotal(): int
     {
-        return 1000;
+        return 10000;
     }
 
     public function getName(): string

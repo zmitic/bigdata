@@ -9,7 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\ProductRepository")
- * @ORM\Table(name="tbl_product")
+ * @ORM\Table(name="tbl_product", indexes={@ORM\Index(columns={"name"})})
  *
  * @Counted(name="product")
  */

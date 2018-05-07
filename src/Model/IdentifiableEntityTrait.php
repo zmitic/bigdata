@@ -17,16 +17,22 @@ trait IdentifiableEntityTrait
      */
 
     /**
-     * @var \Ramsey\Uuid\UuidInterface
+     * var \Ramsey\Uuid\UuidInterface
      *
-     * @ORM\Id
-     * @ORM\Column(type="uuid", unique=true)
-     * @ORM\GeneratedValue(strategy="CUSTOM")
-     * @ORM\CustomIdGenerator(class="Ramsey\Uuid\Doctrine\UuidGenerator")
+     * ORM\Id
+     * ORM\Column(type="uuid", unique=true)
+     * ORM\GeneratedValue(strategy="CUSTOM")
+     * ORM\CustomIdGenerator(class="Ramsey\Uuid\Doctrine\UuidGenerator")
+     */
+
+    /**
+     * @ORM\Id()
+     * @ORM\Column(type="integer")
+     * @ORM\GeneratedValue()
      */
     protected $id;
 
-    public function getId(): UuidInterface
+    public function getId()
     {
         return $this->id;
     }

@@ -39,9 +39,11 @@ class ProductCategoryImporter implements EntityImporterInterface
         $total = $this->getTotal();
         for ($i = 0; $i < $total; ++$i) {
             /** @var Product $product */
-            $product = $this->em->getReference(Product::class, $storage->getOneByRandom('products'));
+//            $product = $this->em->getReference(Product::class, $storage->getOneByRandom('products'));
+            $product = $this->em->getReference(Product::class, random_int(1, 10000000));
             /** @var Category $category */
-            $category = $this->em->getReference(Category::class, $storage->getOneByRandom('categories'));
+//            $category = $this->em->getReference(Category::class, $storage->getOneByRandom('categories'));
+            $category = $this->em->getReference(Category::class, random_int(1, 10000));
             $reference = new ProductCategoryReference($product, $category);
             yield $reference;
         }
