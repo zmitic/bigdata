@@ -32,7 +32,7 @@
 
     {% if pager.beyondRange %}
         <p class="alert alert-info">
-            Total results in database: {{ pager.total }}
+            Total results in database: {{ pager.total|number_format }}
         </p>
     {% endif %}
 {% endblock %}

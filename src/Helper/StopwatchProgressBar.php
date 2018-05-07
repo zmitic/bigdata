@@ -66,7 +66,7 @@ class StopwatchProgressBar
         ];
 
         $progressBar->setFormat(implode("\n", $formats));
-        $progressBar->setRedrawFrequency(500);
+        $progressBar->setRedrawFrequency(3000);
 
         $this->progressBar = $progressBar;
     }

@@ -32,6 +32,7 @@ class AdminController extends Controller
         $columns = $config->getColumnsList();
         $pager = $config->getPager($page);
 
+        dump($pager);
         return $this->render('admin/list.html.twig', [
             'columns' => $columns,
             'pager' => $pager,

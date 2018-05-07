@@ -27,6 +27,11 @@ class EntitiesImporter
         $this->em = $em;
     }
 
+    public function __destruct()
+    {
+        $this->em->getConnection()->exec('SET autocommit=1;SET unique_checks=1;SET foreign_key_checks=1;');
+    }
+
     public function import(SymfonyStyle $io): void
     {
         $storage = new Storage();
@@ -66,14 +71,19 @@ class EntitiesImporter
         if (empty($entities)) {
             return;
         }
-        foreach ($entities as $entity) {
-            $this->em->persist($entity);
-        }
-        $this->em->flush();
+        $em = $this->em;
+
+        $em->transactional(function () use ($entities) {
+            foreach ($entities as $entity) {
+                $this->em->persist($entity);
+            }
+        });
+
+//        $this->em->flush();
         foreach ($entities as $entity) {
             $storage->store($key, (string) $entity->getId());
         }
-        $this->em->clear();
+        $em->clear();
     }
 
     private function getImporters(): array

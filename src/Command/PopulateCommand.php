@@ -29,8 +29,7 @@ class PopulateCommand extends Command
 
     protected function configure(): void
     {
-        $this
-            ->setDescription('Import small amount of data');
+        $this->setDescription('Import small amount of data');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
@@ -40,7 +39,7 @@ class PopulateCommand extends Command
         $this->em->getConnection()->getConfiguration()->setSQLLogger(null);
         $io->caution('Truncating all tables...');
         $io->write(sprintf("\033\143"));
-        $this->truncateAllTables();
+//        $this->truncateAllTables();
         $this->sqlImporter->import($io);
     }
 
