@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Service\Admin;
+use App\Service\FiltersHandler;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -18,23 +19,28 @@ class AdminController extends Controller
      */
     public function admin(): Response
     {
-        return $this->render('admin/base.html.twig', [
-        ]);
+        return $this->render('admin/base.html.twig');
     }
 
     /**
      * @Route("/admin/{segment}", name="admin_segment")
      */
-    public function list(Request $request, Admin $admin, string $segment): Response
+    public function list(Request $request, Admin $admin, FiltersHandler $filtersHandler): Response
     {
         $page = $request->query->getInt('page', 1);
+        $segment = $request->attributes->getAlpha('segment');
         $config = $admin->getConfigForSegment($segment);
         $columns = $config->getColumnsList();
-        $pager = $config->getPager($page);
+
+        $formModel = $config->getFilterForm($filtersHandler);
+        $form = $formModel->getForm($request);
+        $filters = $form->getData();
+        $pager = $config->getPager($page, $filters);
 
         return $this->render('admin/list.html.twig', [
             'columns' => $columns,
             'pager' => $pager,
+            'filter_form' => $form->createView(),
         ]);
     }
 

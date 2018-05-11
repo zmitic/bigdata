@@ -1,6 +1,38 @@
 {% extends 'admin/base.html.twig' %}
 
 {% block content %}
+
+    <form method="get" novalidate autocomplete="off">
+        <div class="row">
+
+            <div class="col-6">
+
+                {{ form_errors(filter_form) }}
+
+
+                <ul class="list-unstyled">
+                    {% for child in filter_form %}
+                        <li>
+                            {% if 'hidden' not in child.vars.block_prefixes %}
+                                {{ form_row(child) }}
+                            {% endif %}
+                        </li>
+                    {% endfor %}
+                </ul>
+
+
+                {{ form_rest(filter_form) }}
+            </div>
+
+            <div class="col-6">
+                <button type="submit" class="btn btn-primary">Apply</button>
+            </div>
+        </div>
+
+    </form>
+
+
+
     <table class="table">
         <tr>
             {% for column in columns %}
@@ -14,7 +46,13 @@
             <tr>
                 {% for column in columns %}
                     <td>
-                        {{ attribute(entity, column) }}
+                        {% set value = attribute(entity, column) %}
+
+                        {% if value is iterable %}
+                            {{ value|join(', ') }}
+                        {% else %}
+                            {{ value }}
+                        {% endif %}
                     </td>
                 {% endfor %}
                 <td>

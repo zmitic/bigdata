@@ -9,7 +9,10 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\ProductRepository")
- * @ORM\Table(name="tbl_product", indexes={@ORM\Index(columns={"name"})})
+ * @ORM\Table(name="tbl_product", indexes={
+ *     @ORM\Index(columns={"name"}),
+ *     @ORM\Index(columns={"base_price"}),
+ * })
  *
  * @Counted(name="product")
  */
@@ -32,6 +35,9 @@ class Product
      * @ORM\OneToMany(targetEntity="App\Entity\ProductCategoryReference", mappedBy="product")
      */
     private $categoryReferences;
+
+    /** @ORM\Column(type="decimal", nullable=true, scale=2) */
+    private $basePrice = 0;
 
     public function __construct()
     {
@@ -69,5 +75,15 @@ class Product
         return array_map(function (ProductCategoryReference $reference) {
             return $reference->getCategory();
         }, $this->categoryReferences->toArray());
+    }
+
+    public function getBasePrice(): float
+    {
+        return $this->basePrice;
+    }
+
+    public function setBasePrice(float $basePrice): void
+    {
+        $this->basePrice = $basePrice;
     }
 }

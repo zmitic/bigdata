@@ -26,3 +26,23 @@ doctrine:
                 dir: '%kernel.project_dir%/src/Entity'
                 prefix: 'App\Entity'
                 alias: App
+        dql:
+#            string_functions:
+#                MATCH_AGAINST: App\Doctrine\Extension\MatchAgainst
+            numeric_functions:
+                round: DoctrineExtensions\Query\Mysql\Round
+            string_functions:
+                field: DoctrineExtensions\Query\Mysql\Field
+                collate: DoctrineExtensions\Query\Mysql\Collate
+                match: DoctrineExtensions\Query\Mysql\MatchAgainst
+                soundex: DoctrineExtensions\Query\Mysql\Soundex
+            datetime_functions:
+                date: DoctrineExtensions\Query\Mysql\Date
+                datediff: DoctrineExtensions\Query\Mysql\DateDiff
+                datesub: DoctrineExtensions\Query\Mysql\DateSub
+                year: DoctrineExtensions\Query\Mysql\Year
+                month: DoctrineExtensions\Query\Mysql\Month
+                day: DoctrineExtensions\Query\Mysql\Day
+                now: DoctrineExtensions\Query\Mysql\Now
+                time: DoctrineExtensions\Query\Mysql\Time
+                timediff: DoctrineExtensions\Query\Mysql\TimeDiff

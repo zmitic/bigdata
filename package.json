@@ -1,6 +1,7 @@
 {
     "dependencies": {
         "@symfony/webpack-encore": "^0.17.0",
+        "barba.js": "^1.0.0",
         "bootstrap": "^4.1.1",
         "bootstrap-sass": "^3.3.7",
         "jquery": "^3.3.1",

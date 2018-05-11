@@ -41,6 +41,7 @@ class ProductsImporter implements EntityImporterInterface
 //            $manufacturer = $this->em->getReference(Manufacturer::class, $storage->getOneByRandom('manufacturers'));
             $manufacturer = $this->em->getReference(Manufacturer::class, random_int(1, 10000));
             $product = new Product();
+            $product->setBasePrice((float) random_int(1, 10000));
             $product->setManufacturer($manufacturer);
             $product->setName(sprintf('Product_%07d', random_int(1, $total)));
             yield $product;

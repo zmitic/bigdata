@@ -76,9 +76,11 @@ abstract class BaseRepository extends ServiceEntityRepository
     {
         $expressions = [];
         foreach ($generators as $generator) {
-            foreach ($generator as $expression) {
-                if ($expression) {
-                    $expressions[] = $expression;
+            if ($generator) {
+                foreach ($generator as $expression) {
+                    if ($expression) {
+                        $expressions[] = $expression;
+                    }
                 }
             }
         }

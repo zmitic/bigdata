@@ -2,6 +2,7 @@
 
 namespace App\Model;
 
+use App\Service\FiltersHandler;
 use App\Service\Paginator\Pager;
 
 interface AdminInterface
@@ -12,5 +13,7 @@ interface AdminInterface
 
     public function getColumnsList(): array;
 
-    public function getPager(int $page): Pager;
+    public function getPager(int $page, array $filters): Pager;
+
+    public function getFilterForm(FiltersHandler $filtersHandler): FilterFormModel;
 }

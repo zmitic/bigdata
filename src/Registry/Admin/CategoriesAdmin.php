@@ -3,7 +3,9 @@
 namespace App\Registry\Admin;
 
 use App\Model\AdminInterface;
+use App\Model\FilterFormModel;
 use App\Repository\CategoryRepository;
+use App\Service\FiltersHandler;
 use App\Service\Paginator\Pager;
 
 class CategoriesAdmin implements AdminInterface
@@ -26,8 +28,15 @@ class CategoriesAdmin implements AdminInterface
         return ['name'];
     }
 
-    public function getPager(int $page): Pager
+    public function getPager(int $page, array $filters): Pager
     {
-        return $this->repository->paginate($page, null);
+        return $this->repository->paginate($page, null,
+            $this->repository->whereName('Category_0424')
+        );
+    }
+
+    public function getFilterForm(FiltersHandler $filtersHandler): FilterFormModel
+    {
+        return $filtersHandler->begin([]);
     }
 }
