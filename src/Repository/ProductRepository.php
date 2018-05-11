@@ -6,7 +6,6 @@ use App\Entity\Product;
 use App\Model\BaseRepository;
 use Doctrine\Common\Collections\Criteria;
 use Symfony\Bridge\Doctrine\RegistryInterface;
-use Doctrine\Common\Collections\Expr\Expression;
 
 class ProductRepository extends BaseRepository
 {
@@ -15,9 +14,9 @@ class ProductRepository extends BaseRepository
         parent::__construct($registry, Product::class);
     }
 
-    public function whereName(string $name): ?Expression
+    public function whereName(string $name): ?\Generator
     {
-        return Criteria::expr()->eq('name', $name);
+        yield Criteria::expr()->eq('name', $name);
     }
 
     public function optimizeJoinsOn(array $products): void

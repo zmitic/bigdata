@@ -8,6 +8,7 @@ use App\Service\Paginator\Paginator;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\Common\Collections\Expr\Expression;
+use Generator;
 
 abstract class BaseRepository extends ServiceEntityRepository
 {
@@ -20,13 +21,13 @@ abstract class BaseRepository extends ServiceEntityRepository
         $this->paginator = $paginator;
     }
 
-    public function paginate(int $page, ?int $limit, ?Expression ...$expressions): Pager
+    public function paginate(int $page, ?int $limit, ?Generator ...$generators): Pager
     {
         $page = $page ?? 1;
         $limit = $limit ?? 10;
 
         $criteria = Criteria::create();
-        $expressions = $this->cleanExpressions(...$expressions);
+        $expressions = $this->convertGeneratorsToExpressions(...$generators);
         if ($expressions) {
             $criteria->andWhere(Criteria::expr()->andX(...$expressions));
         }
@@ -35,10 +36,10 @@ abstract class BaseRepository extends ServiceEntityRepository
         return $this->paginator->paginate($qb, $page, $limit);
     }
 
-    public function getResults(?Expression ...$expressions): array
+    public function getResults(?Generator ...$generators): array
     {
         $criteria = Criteria::create();
-        $expressions = $this->cleanExpressions(...$expressions);
+        $expressions = $this->convertGeneratorsToExpressions(...$generators);
         if ($expressions) {
             $criteria->andWhere(Criteria::expr()->andX(...$expressions));
         }
@@ -46,34 +47,42 @@ abstract class BaseRepository extends ServiceEntityRepository
         return $this->matching($criteria)->toArray();
     }
 
-    public function orX(?Expression ...$expressions): ?Expression
+    public function orX(?Generator ...$generators): ?Generator
     {
-        $clean = $this->cleanExpressions(...$expressions);
-
-        return Criteria::expr()->orX(...$clean);
+        if ($expressions = $this->convertGeneratorsToExpressions(...$generators)) {
+            yield Criteria::expr()->orX(...$expressions);
+        }
     }
 
-    public function andX(?Expression ...$expressions): ?Expression
+    public function andX(?Generator ...$generators): ?Generator
     {
-        $clean = $this->cleanExpressions(...$expressions);
-
-        return Criteria::expr()->andX(...$clean);
+        if ($expressions = $this->convertGeneratorsToExpressions(...$generators)) {
+            yield Criteria::expr()->andX(...$expressions);
+        }
     }
 
-    public function whereId(string $id): ?Expression
+    public function whereId(string $id): ?Generator
     {
-        return Criteria::expr()->eq('id', $id);
+        yield Criteria::expr()->eq('id', $id);
     }
 
-    public function whereIds(array $ids): ?Expression
+    public function whereIds(array $ids): ?Generator
     {
-        return Criteria::expr()->in('id', $ids);
+        yield Criteria::expr()->in('id', $ids);
     }
 
-    private function cleanExpressions(?Expression ...$expressions): array
+    /** @return Expression[] */
+    private function convertGeneratorsToExpressions(?Generator ...$generators): array
     {
-        return array_filter($expressions, function (?Expression $expression) {
-            return (bool) $expression;
-        });
+        $expressions = [];
+        foreach ($generators as $generator) {
+            foreach ($generator as $expression) {
+                if ($expression) {
+                    $expressions[] = $expression;
+                }
+            }
+        }
+
+        return $expressions;
     }
 }

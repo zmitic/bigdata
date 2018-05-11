@@ -7,17 +7,16 @@ use Ramsey\Uuid\UuidInterface;
 
 trait IdentifiableEntityTrait
 {
-
     /**
      * var UuidInterface
      * ORM\Id
      * ORM\Column(type="uuid_binary_ordered_time", unique=true)
      * ORM\GeneratedValue(strategy="CUSTOM")
-     * ORM\CustomIdGenerator(class="Ramsey\Uuid\Doctrine\UuidOrderedTimeGenerator")
+     * ORM\CustomIdGenerator(class="Ramsey\Uuid\Doctrine\UuidOrderedTimeGenerator").
      */
 
     /**
-     * var \Ramsey\Uuid\UuidInterface
+     * var \Ramsey\Uuid\UuidInterface.
      *
      * ORM\Id
      * ORM\Column(type="uuid", unique=true)

@@ -29,7 +29,6 @@
 
     {{ pagerfanta(pager, 'twitter_bootstrap4') }}
 
-
     {% if pager.beyondRange %}
         <p class="alert alert-info">
             Total results in database: {{ pager.total|number_format }}

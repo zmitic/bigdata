@@ -5,7 +5,7 @@ namespace App\Repository;
 use App\Entity\Category;
 use App\Model\BaseRepository;
 use Doctrine\Common\Collections\Criteria;
-use Doctrine\Common\Collections\Expr\Expression;
+use Generator;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
 class CategoryRepository extends BaseRepository
@@ -15,8 +15,8 @@ class CategoryRepository extends BaseRepository
         parent::__construct($registry, Category::class);
     }
 
-    public function whereName(string $name): ?Expression
+    public function whereName(string $name): ?Generator
     {
-        return Criteria::expr()->eq('name', $name);
+        yield Criteria::expr()->eq('name', $name);
     }
 }
