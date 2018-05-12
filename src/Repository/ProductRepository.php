@@ -21,30 +21,12 @@ class ProductRepository extends BaseRepository
         yield Criteria::expr()->eq('name', $name);
     }
 
-    public function applyFilters(array $filters)
+    public function applyFilters(array $filters): ?Generator
     {
-        yield from $this->whereMinPrice($filters['min_price']);
-        yield from $this->whereMaxPrice($filters['max_price']);
-        yield from $this->whereManufacturer($filters['manufacturer']);
-    }
+        yield !empty($filters['min_price']) ? Criteria::expr()->gte('basePrice', (float)$filters['min_price']) : null;
+        yield !empty($filters['max_price']) ? Criteria::expr()->lte('basePrice', (float)$filters['max_price']) : null;
 
-    private function whereMinPrice($price)
-    {
-        yield Criteria::expr()->gt('basePrice', (float)$price);
-    }
-
-    private function whereMaxPrice($price)
-    {
-        if ($price) {
-            yield Criteria::expr()->lt('basePrice', (float)$price);
-        }
-    }
-
-    private function whereManufacturer(?Manufacturer $manufacturer)
-    {
-        if ($manufacturer) {
-            yield Criteria::expr()->eq('manufacturer', $manufacturer);
-        }
+        yield !empty($filters['manufacturer']) ? yield Criteria::expr()->eq('manufacturer', $filters['manufacturer']) : null;
     }
 
     public function optimizeJoinsOn(array $products): void
