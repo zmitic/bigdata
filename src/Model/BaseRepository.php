@@ -8,7 +8,7 @@ use App\Service\Paginator\Paginator;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\Common\Collections\Expr\Expression;
-use Doctrine\Common\Collections\ExpressionBuilder;
+use Doctrine\ORM\Query\Expr;
 use Generator;
 
 abstract class BaseRepository extends ServiceEntityRepository
@@ -16,34 +16,40 @@ abstract class BaseRepository extends ServiceEntityRepository
     /** @var Paginator */
     protected $paginator;
 
-    private $expressionBuilder;
-
     /** @see RepositoriesPass */
     public function setPaginator(Paginator $paginator): void
     {
         $this->paginator = $paginator;
     }
 
-    protected function expr(): ExpressionBuilder
+    protected function expr(): Expr
     {
-        if (!$this->expressionBuilder) {
-            $this->expressionBuilder = Criteria::expr();
-        }
-
-        return $this->expressionBuilder;
+        return $this->_em->getExpressionBuilder();
     }
 
-    public function paginate(int $page, ?int $limit, ?Generator ...$generators): Pager
+    public function paginate(?int $page, ?int $limit, ...$generators): Pager
     {
         $page = $page ?? 1;
         $limit = $limit ?? 10;
 
-        $criteria = Criteria::create();
-        $expressions = $this->convertGeneratorsToExpressions(...$generators);
-        if ($expressions) {
-            $criteria->andWhere(Criteria::expr()->andX(...$expressions));
+        $qb = $this->createQueryBuilder('o');
+        $operators = [];
+        foreach ($generators as $generator) {
+            if ($generator) {
+                foreach ($generator as $expression) {
+                    if ($expression) {
+                        $operators[] = array_shift($expression);
+                        foreach ($expression as $parameter => $value) {
+                            $qb->setParameter($parameter, $value);
+                        }
+                    }
+                }
+            }
         }
-        $qb = $this->createQueryBuilder('o')->addCriteria($criteria);
+
+        if ($operators) {
+            $qb->andWhere(...$operators);
+        }
 
         return $this->paginator->paginate($qb, $page, $limit);
     }
