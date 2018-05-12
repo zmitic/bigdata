@@ -43,9 +43,6 @@ class FilterFormModel
                 'label' => false,
             ]));
         }
-        $formBuilder->add('page', HiddenType::class, [
-            'empty_data' => $request->query->getInt('page', 1),
-        ]);
 
         if (isset($this->defaultData['sort']) && false !== $this->defaultData['sort']) {
             $formBuilder->add('direction', HiddenType::class, [
