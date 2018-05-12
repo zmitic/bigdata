@@ -43,6 +43,7 @@ class EntityCountSubscriber implements EventSubscriber
 
     private function findCounterFor(string $id, ObjectManager $em): Counter
     {
+        /** @var Counter $counter */
         $counter = $em->find(Counter::class, $id);
         if (!$counter) {
             $counter = new Counter($id);
