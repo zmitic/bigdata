@@ -2,7 +2,6 @@
 
 namespace App\Repository;
 
-use App\Entity\Manufacturer;
 use App\Entity\Product;
 use App\Model\BaseRepository;
 use Doctrine\Common\Collections\Criteria;
@@ -25,8 +24,7 @@ class ProductRepository extends BaseRepository
     {
         yield !empty($filters['min_price']) ? Criteria::expr()->gte('basePrice', (float)$filters['min_price']) : null;
         yield !empty($filters['max_price']) ? Criteria::expr()->lte('basePrice', (float)$filters['max_price']) : null;
-
-        yield !empty($filters['manufacturer']) ? yield Criteria::expr()->eq('manufacturer', $filters['manufacturer']) : null;
+        yield !empty($filters['manufacturer']) ? Criteria::expr()->eq('manufacturer', $filters['manufacturer']) : null;
     }
 
     public function optimizeJoinsOn(array $products): void
