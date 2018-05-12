@@ -22,9 +22,9 @@ class ProductRepository extends BaseRepository
 
     public function applyFilters(array $filters): ?Generator
     {
-        yield !empty($filters['min_price']) ? Criteria::expr()->gte('basePrice', (float) $filters['min_price']) : null;
-        yield !empty($filters['max_price']) ? Criteria::expr()->lte('basePrice', (float) $filters['max_price']) : null;
-        yield !empty($filters['manufacturer']) ? Criteria::expr()->eq('manufacturer', $filters['manufacturer']) : null;
+        yield !empty($filters['min_price']) ? $this->expr()->gte('basePrice', (float) $filters['min_price']) : null;
+        yield !empty($filters['max_price']) ? $this->expr()->lte('basePrice', (float) $filters['max_price']) : null;
+        yield !empty($filters['manufacturer']) ? $this->expr()->eq('manufacturer', $filters['manufacturer']) : null;
     }
 
     public function optimizeJoinsOn(array $products): void

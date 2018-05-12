@@ -8,6 +8,7 @@ use App\Service\Paginator\Paginator;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\Common\Collections\Expr\Expression;
+use Doctrine\Common\Collections\ExpressionBuilder;
 use Generator;
 
 abstract class BaseRepository extends ServiceEntityRepository
@@ -15,10 +16,21 @@ abstract class BaseRepository extends ServiceEntityRepository
     /** @var Paginator */
     protected $paginator;
 
+    private $expressionBuilder;
+
     /** @see RepositoriesPass */
     public function setPaginator(Paginator $paginator): void
     {
         $this->paginator = $paginator;
+    }
+
+    protected function expr(): ExpressionBuilder
+    {
+        if (!$this->expressionBuilder) {
+            $this->expressionBuilder = Criteria::expr();
+        }
+
+        return $this->expressionBuilder;
     }
 
     public function paginate(int $page, ?int $limit, ?Generator ...$generators): Pager
