@@ -22,8 +22,8 @@ class ProductRepository extends BaseRepository
 
     public function applyFilters(array $filters): ?Generator
     {
-        yield !empty($filters['min_price']) ? Criteria::expr()->gte('basePrice', (float)$filters['min_price']) : null;
-        yield !empty($filters['max_price']) ? Criteria::expr()->lte('basePrice', (float)$filters['max_price']) : null;
+        yield !empty($filters['min_price']) ? Criteria::expr()->gte('basePrice', (float) $filters['min_price']) : null;
+        yield !empty($filters['max_price']) ? Criteria::expr()->lte('basePrice', (float) $filters['max_price']) : null;
         yield !empty($filters['manufacturer']) ? Criteria::expr()->eq('manufacturer', $filters['manufacturer']) : null;
     }
 
@@ -32,7 +32,7 @@ class ProductRepository extends BaseRepository
         $this->_em->getRepository(Product::class)->createQueryBuilder('o')
             ->select('PARTIAL o.{id}')
             ->leftJoin('o.categoryReferences', 'product_references')->addSelect('product_references')
-                ->leftJoin('product_references.category', 'category')->addSelect('category')
+            ->leftJoin('product_references.category', 'category')->addSelect('category')
             ->where('o IN (:products)')->setParameter('products', $products)
             ->getQuery()->getResult();
     }

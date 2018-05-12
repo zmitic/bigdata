@@ -47,8 +47,7 @@ class ProductsAdmin implements AdminInterface
                 'placeholder' => '-- Select manufacturer --',
                 'query_builder' => function (EntityRepository $repo) {
                     return $repo->createQueryBuilder('o')->orderBy('o.name')->setMaxResults(50);
-                }
-
+                },
             ])
             ->add('min_price', MoneyType::class, [
                 'attr' => [
