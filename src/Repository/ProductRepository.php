@@ -5,7 +5,6 @@ namespace App\Repository;
 use App\Entity\Manufacturer;
 use App\Entity\Product;
 use App\Model\BaseRepository;
-use Doctrine\Common\Collections\Criteria;
 use Generator;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
@@ -14,11 +13,6 @@ class ProductRepository extends BaseRepository
     public function __construct(RegistryInterface $registry)
     {
         parent::__construct($registry, Product::class);
-    }
-
-    public function whereName(string $name): ?Generator
-    {
-        yield Criteria::expr()->eq('name', $name);
     }
 
     public function applyFilters(array $filters): ?Generator
@@ -30,17 +24,19 @@ class ProductRepository extends BaseRepository
 
     private function whereMinPrice(?float $minPrice): ?Generator
     {
-        yield $minPrice ? [$this->expr()->gte('o.basePrice', ':min'), 'min' => $minPrice] : null;
+        yield $this->make($this->expr()->gte('o.basePrice', ':min'), ['min' => $minPrice], $minPrice);
     }
 
     private function whereMaxPrice(?float $maxPrice): ?Generator
     {
-        yield $maxPrice ? [$this->expr()->lte('o.basePrice', ':max'), 'max' => $maxPrice] : null;
+        yield $this->make($this->expr()->lte('o.basePrice', ':max'), ['max' => $maxPrice], $maxPrice);
     }
 
     private function whereManufacturer(?Manufacturer $manufacturer): ?Generator
     {
-        yield $manufacturer ? [$this->expr()->eq('o.manufacturer', ':man'), 'man' => $manufacturer] : null;
+        if ($manufacturer) {
+            yield [$this->expr()->eq('o.manufacturer', ':man'), 'man' => $manufacturer];
+        }
     }
 
     public function optimizeJoinsOn(array $products): void

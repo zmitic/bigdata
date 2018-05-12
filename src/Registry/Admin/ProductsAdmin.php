@@ -36,7 +36,7 @@ class ProductsAdmin implements AdminInterface
     {
         $repo = $this->repository;
 
-        return $repo->paginate($page, null, $repo->applyFilters($filters));
+        return $repo->paginate([$page], null, $repo->applyFilters($filters));
     }
 
     public function getFilterForm(FiltersHandler $filtersHandler): FilterFormModel

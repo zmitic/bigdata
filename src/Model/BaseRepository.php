@@ -9,6 +9,7 @@ use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\Common\Collections\Expr\Expression;
 use Doctrine\ORM\Query\Expr;
+use Doctrine\ORM\QueryBuilder;
 use Generator;
 
 abstract class BaseRepository extends ServiceEntityRepository
@@ -27,12 +28,28 @@ abstract class BaseRepository extends ServiceEntityRepository
         return $this->_em->getExpressionBuilder();
     }
 
-    public function paginate(?int $page, ?int $limit, ...$generators): Pager
+    protected function make($expression, array $parameters, $condition = true)
     {
-        $page = $page ?? 1;
-        $limit = $limit ?? 10;
+        if (!$condition) {
+            return null;
+        }
+
+        return array_merge([$expression], $parameters);
+    }
+
+    public function paginate(array $config, ?Generator ...$generators): Pager
+    {
+        $page = array_shift($config) ?? 1;
+        $limit = array_shift($config) ?? 10;
 
         $qb = $this->createQueryBuilder('o');
+        $this->appendGeneratorsToQB($qb, ...$generators);
+
+        return $this->paginator->paginate($qb, $page, $limit);
+    }
+
+    private function appendGeneratorsToQB(QueryBuilder $qb, ?Generator ...$generators): void
+    {
         $operators = [];
         foreach ($generators as $generator) {
             if ($generator) {
@@ -50,8 +67,6 @@ abstract class BaseRepository extends ServiceEntityRepository
         if ($operators) {
             $qb->andWhere(...$operators);
         }
-
-        return $this->paginator->paginate($qb, $page, $limit);
     }
 
     public function getResults(?Generator ...$generators): array

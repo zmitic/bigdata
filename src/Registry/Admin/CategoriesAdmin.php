@@ -30,7 +30,7 @@ class CategoriesAdmin implements AdminInterface
 
     public function getPager(int $page, array $filters): Pager
     {
-        return $this->repository->paginate($page, null);
+        return $this->repository->paginate([$page], null);
     }
 
     public function getFilterForm(FiltersHandler $filtersHandler): FilterFormModel
