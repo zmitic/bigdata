@@ -2,8 +2,6 @@
 
 namespace App\Model\Importer;
 
-use App\Helper\Storage;
-
 interface EntityImporterInterface
 {
     public const TAG = 'app.entity_importer';
@@ -14,5 +12,5 @@ interface EntityImporterInterface
 
     public function getName(): string;
 
-    public function getEntities(Storage $storage): iterable;
+    public function getEntities(): iterable;
 }

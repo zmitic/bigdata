@@ -3,7 +3,6 @@
 namespace App\Registry\EntityImporter;
 
 use App\Entity\Category;
-use App\Helper\Storage;
 use App\Model\Importer\EntityImporterInterface;
 
 class CategoriesImporter implements EntityImporterInterface
@@ -23,7 +22,7 @@ class CategoriesImporter implements EntityImporterInterface
         return 'categories';
     }
 
-    public function getEntities(Storage $storage): iterable
+    public function getEntities(): iterable
     {
         $total = $this->getTotal();
         for ($i = 0; $i < $total; ++$i) {

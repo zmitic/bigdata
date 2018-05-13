@@ -105,7 +105,7 @@ abstract class BaseRepository extends ServiceEntityRepository
     }
 
     /** @return Expression[] */
-    private function convertGeneratorsToExpressions(?Generator ...$generators): array
+    private function convertGeneratorsToExpressions(?iterable ...$generators): array
     {
         $expressions = [];
         foreach ($generators as $generator) {

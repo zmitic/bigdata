@@ -3,7 +3,6 @@
 namespace App\Registry\EntityImporter;
 
 use App\Entity\Manufacturer;
-use App\Helper\Storage;
 use App\Entity\Product;
 use App\Model\Importer\EntityImporterInterface;
 use Doctrine\ORM\EntityManagerInterface;
@@ -33,7 +32,7 @@ class ProductsImporter implements EntityImporterInterface
         return 'products';
     }
 
-    public function getEntities(Storage $storage): iterable
+    public function getEntities(): iterable
     {
         $total = $this->getTotal();
         for ($i = 0; $i < $total; ++$i) {

@@ -5,7 +5,6 @@ namespace App\Registry\EntityImporter;
 use App\Entity\Manufacturer;
 use App\Model\Importer\EntityImporterInterface;
 use Faker\Factory;
-use App\Helper\Storage;
 
 class ManufacturersImporter implements EntityImporterInterface
 {
@@ -24,7 +23,7 @@ class ManufacturersImporter implements EntityImporterInterface
         return 'manufacturers';
     }
 
-    public function getEntities(Storage $storage): iterable
+    public function getEntities(): iterable
     {
         $faker = Factory::create();
         $total = $this->getTotal();
