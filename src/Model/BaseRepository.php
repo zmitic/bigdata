@@ -37,7 +37,7 @@ abstract class BaseRepository extends ServiceEntityRepository
         return array_merge([$expression], $parameters);
     }
 
-    public function paginate(array $config, ?Generator ...$generators): Pager
+    public function paginate(array $config, ?iterable ...$generators): Pager
     {
         $page = array_shift($config) ?? 1;
         $limit = array_shift($config) ?? 10;
@@ -48,7 +48,7 @@ abstract class BaseRepository extends ServiceEntityRepository
         return $this->paginator->paginate($qb, $page, $limit);
     }
 
-    private function appendGeneratorsToQB(QueryBuilder $qb, ?Generator ...$generators): void
+    private function appendGeneratorsToQB(QueryBuilder $qb, ?iterable ...$generators): void
     {
         $operators = [];
         foreach ($generators as $generator) {

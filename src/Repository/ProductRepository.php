@@ -24,7 +24,7 @@ class ProductRepository extends BaseRepository
     private function whereMinPrice(?float $minPrice): ?iterable
     {
         return [
-            $this->make($this->expr()->gte('o.basePrice', ':min'), ['min' => $minPrice], $minPrice)
+            $this->make($this->expr()->gte('o.basePrice', ':min'), ['min' => $minPrice], $minPrice),
         ];
     }
 
@@ -42,7 +42,7 @@ class ProductRepository extends BaseRepository
 
     public function optimizeJoinsOn(array $products): void
     {
-        $this->_em->getRepository(Product::class)->createQueryBuilder('o')
+        $this->createQueryBuilder('o')
             ->select('PARTIAL o.{id}')
             ->leftJoin('o.categoryReferences', 'product_references')->addSelect('product_references')
             ->leftJoin('product_references.category', 'category')->addSelect('category')
