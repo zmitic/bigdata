@@ -7,7 +7,6 @@ use App\Model\FilterFormModel;
 use App\Repository\CategoryRepository;
 use App\Service\FiltersHandler;
 use App\Service\Paginator\Pager;
-use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 
@@ -16,13 +15,9 @@ class CategoriesAdmin implements AdminInterface
     /** @var CategoryRepository */
     private $repository;
 
-    /** @var EntityManagerInterface */
-    private $em;
-
-    public function __construct(CategoryRepository $repository, EntityManagerInterface $em)
+    public function __construct(CategoryRepository $repository)
     {
         $this->repository = $repository;
-        $this->em = $em;
     }
 
     public function getName(): string
@@ -52,13 +47,12 @@ class CategoriesAdmin implements AdminInterface
 
     public function deleteOne(object $entity): void
     {
-        $this->em->remove($entity);
-        $this->em->flush();
+        $this->repository->remove($entity);
     }
 
     public function updateOne(object $entity): void
     {
-        $this->em->flush();
+        $this->repository->flush();
     }
 
     public function setFormBuilder(FormBuilderInterface $formBuilder): void

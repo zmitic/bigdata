@@ -110,6 +110,24 @@ abstract class BaseRepository extends ServiceEntityRepository
         yield Criteria::expr()->in('id', $ids);
     }
 
+    public function remove(object $entity, bool $flush = true): void
+    {
+        $this->getEntityManager()->remove($entity);
+        if ($flush) {
+            $this->getEntityManager()->flush();
+        }
+    }
+
+    public function persist(object $entity): void
+    {
+        $this->getEntityManager()->persist($entity);
+    }
+
+    public function flush(): void
+    {
+        $this->getEntityManager()->flush();
+    }
+
     /** @return Expression[] */
     private function convertGeneratorsToExpressions(?iterable ...$generators): array
     {
