@@ -79,7 +79,7 @@ class AdminController extends Controller
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            $config->updateOne($entity);
+            $config->persist($entity);
             $routeParams = array_merge(['segment' => $segment], $request->query->all());
 
             return $this->redirectToRoute('admin_list', $routeParams);
@@ -88,6 +88,31 @@ class AdminController extends Controller
         return $this->render('admin/edit.html.twig', [
             'segment' => $segment,
             'id' => $id,
+            'form' => $form->createView(),
+        ]);
+    }
+
+    /**
+     * @Route("/{segment}/create", name="admin_create")
+     */
+    public function create(Request $request): Response
+    {
+        $segment = $request->attributes->getAlpha('segment');
+        $config = $this->admin->getConfigForSegment($segment);
+        $entity = $config->create($request);
+        $formBuilder = $this->createFormBuilder($entity);
+        $config->setFormBuilder($formBuilder);
+        $form = $formBuilder->getForm();
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $config->persist($entity);
+            $routeParams = array_merge(['segment' => $segment], $request->query->all());
+
+            return $this->redirectToRoute('admin_list', $routeParams);
+        }
+
+        return $this->render('admin/create.html.twig', [
+            'segment' => $segment,
             'form' => $form->createView(),
         ]);
     }
@@ -116,7 +141,7 @@ class AdminController extends Controller
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            $config->deleteOne($entity);
+            $config->delete($entity);
             $routeParams = array_merge(['segment' => $segment], $request->query->all());
 
             return $this->redirectToRoute('admin_list', $routeParams);

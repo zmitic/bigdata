@@ -2,6 +2,7 @@
 
 namespace App\Registry\Admin;
 
+use App\Entity\Category;
 use App\Model\AdminInterface;
 use App\Model\FilterFormModel;
 use App\Repository\CategoryRepository;
@@ -9,6 +10,7 @@ use App\Service\FiltersHandler;
 use App\Service\Paginator\Pager;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\HttpFoundation\Request;
 
 class CategoriesAdmin implements AdminInterface
 {
@@ -45,14 +47,20 @@ class CategoriesAdmin implements AdminInterface
         return $this->repository->find($id);
     }
 
-    public function deleteOne(object $entity): void
+    public function delete(object $entity): void
     {
         $this->repository->remove($entity, true);
     }
 
-    public function updateOne(object $entity): void
+    public function persist(object $entity): void
     {
+        $this->repository->persist($entity);
         $this->repository->flush();
+    }
+
+    public function create(Request $request): object
+    {
+        return new Category();
     }
 
     public function setFormBuilder(FormBuilderInterface $formBuilder): void

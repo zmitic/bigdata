@@ -5,6 +5,7 @@
     <div class="row">
 
         <div class="col-3">
+            {% if filter_form.children|length %}
             <form method="get" novalidate autocomplete="off" id="filter-form"
                   action="{{ path('admin_list', {'segment': segment}) }}">
                 {{ form_errors(filter_form) }}
@@ -23,6 +24,7 @@
                 <input type="hidden" name="page" value="1">
                 <button type="submit" class="btn btn-primary">Apply</button>
             </form>
+            {% endif %}
         </div>
 
         <div class="col-9">

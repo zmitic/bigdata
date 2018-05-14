@@ -3,16 +3,9 @@ require('./bridge/select2entity_brige');
 require('./bridge/ajax-form-bridge');
 const Barba = require('barba.js');
 
-Barba.Pjax.cacheEnabled = false;
-Barba.Pjax.start();
 
-$(document).on('click', 'a.confirm', function () {
-    let href = $(this).attr('data-href');
-    if (confirm('Are you sure you want to delete this object?')) {
-        $.ajax(href, {
-            method: 'DELETE'
-        });
-    }
+Barba.Dispatcher.on('newPageReady', function (current, prev, rawContainer) {
+    $(document).trigger('dom_updated', [$(rawContainer)]);
 });
 
 $(document).ajaxComplete(function (event, xhr) {
@@ -21,5 +14,9 @@ $(document).ajaxComplete(function (event, xhr) {
         Barba.Pjax.goTo(redirectUrl);
     }
 });
+
+
+Barba.Pjax.cacheEnabled = false;
+Barba.Pjax.start();
 
 

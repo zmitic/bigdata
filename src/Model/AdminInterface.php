@@ -5,6 +5,7 @@ namespace App\Model;
 use App\Service\FiltersHandler;
 use App\Service\Paginator\Pager;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\HttpFoundation\Request;
 
 interface AdminInterface
 {
@@ -20,9 +21,11 @@ interface AdminInterface
 
     public function findOne(string $id): ?object;
 
-    public function deleteOne(object $entity): void;
+    public function delete(object $entity): void;
 
-    public function updateOne(object $entity): void;
+    public function persist(object $entity): void;
+
+    public function create(Request $request): object;
 
     public function setFormBuilder(FormBuilderInterface $formBuilder): void;
 }

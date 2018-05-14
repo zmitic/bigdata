@@ -51,7 +51,7 @@ class Product
         return (string) $this->name;
     }
 
-    public function getName(): string
+    public function getName(): ?string
     {
         return $this->name;
     }

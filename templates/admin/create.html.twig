@@ -2,16 +2,14 @@
 
 {% block content %}
     <div class="ajax-form-wrapper">
-        <form action="{{ path('admin_edit', {'segment': segment, 'id': id}|merge(app.request.query.all)) }}"
-              method="post"
+        <form action="{{ path('admin_create', {'segment': segment}|merge(app.request.query.all)) }}" method="post"
               novalidate autocomplete="off" class="ajax-form">
-
             {{ form_errors(form) }}
             {{ form_rest(form) }}
 
             <a class="btn btn-danger"
                href="{{ path('admin_list', {'segment': segment}|merge(app.request.query.all)) }}">Cancel</a>
-            <button type="submit" class="btn btn-primary">Update</button>
+            <button type="submit" class="btn btn-primary">Create</button>
         </form>
     </div>
 {% endblock %}
