@@ -12,7 +12,9 @@ class AjaxResponseSubscriber implements EventSubscriberInterface
     public static function getSubscribedEvents(): array
     {
         return [
-            'kernel.response' => 'onKernelResponse',
+            'kernel.response' => [
+                'onKernelResponse',
+                100],
         ];
     }
 
@@ -26,7 +28,7 @@ class AjaxResponseSubscriber implements EventSubscriberInterface
         if (!$response instanceof RedirectResponse) {
             return;
         }
-        $newResponse = new Response();
+        $newResponse = new Response($response->getContent());
         $newResponse->headers->set('redirect-to', $response->getTargetUrl());
         $event->setResponse($newResponse);
     }

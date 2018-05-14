@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Response\BarbaRedirectResponse;
 use App\Service\Admin;
 use App\Service\FiltersHandler;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
@@ -68,6 +69,7 @@ class AdminController extends Controller
         $id = $request->attributes->get('id');
         $config = $this->admin->getConfigForSegment($segment);
         $entity = $config->findOne($id);
+        $response = new Response();
 
         if (!$entity) {
             throw $this->createNotFoundException();
@@ -81,15 +83,14 @@ class AdminController extends Controller
         if ($form->isSubmitted() && $form->isValid()) {
             $config->persist($entity);
             $routeParams = array_merge(['segment' => $segment], $request->query->all());
-
-            return $this->redirectToRoute('admin_list', $routeParams);
+            $response = new BarbaRedirectResponse($this->generateUrl('admin_list', $routeParams));
         }
 
         return $this->render('admin/edit.html.twig', [
             'segment' => $segment,
             'id' => $id,
             'form' => $form->createView(),
-        ]);
+        ], $response);
     }
 
     /**
@@ -103,18 +104,18 @@ class AdminController extends Controller
         $formBuilder = $this->createFormBuilder($entity);
         $config->setFormBuilder($formBuilder);
         $form = $formBuilder->getForm();
+        $response = new Response();
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $config->persist($entity);
             $routeParams = array_merge(['segment' => $segment], $request->query->all());
-
-            return $this->redirectToRoute('admin_list', $routeParams);
+            $response = new BarbaRedirectResponse($this->generateUrl('admin_list', $routeParams));
         }
 
         return $this->render('admin/create.html.twig', [
             'segment' => $segment,
             'form' => $form->createView(),
-        ]);
+        ], $response);
     }
 
     /**
