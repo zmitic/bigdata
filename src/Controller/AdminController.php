@@ -155,13 +155,13 @@ class AdminController extends Controller
         ]);
     }
 
-    public function navigation(Admin $admin, RequestStack $requestStack): Response
+    public function navigation(RequestStack $requestStack): Response
     {
         $masterRequest = $requestStack->getMasterRequest();
         if (!$masterRequest) {
             throw new \LogicException('You must embed this action.');
         }
-        $segments = $admin->getSegmentNames();
+        $segments = $this->admin->getSegmentNames();
 
         return $this->render('admin/_navigation.html.twig', [
             'segments' => $segments,
