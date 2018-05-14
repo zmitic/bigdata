@@ -1,6 +1,0 @@
-<div class="list-group">
-    {% for segment_name in segments %}
-        <a class="list-group-item {{ active is same as(segment_name) ? 'active' }}" href="{{ path('admin_list', {'segment': segment_name}) }}">{{ segment_name }}</a>
-    {% endfor %}
-</div>
-

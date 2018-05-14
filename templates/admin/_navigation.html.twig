@@ -1,0 +1,17 @@
+
+
+<nav class="navbar navbar-expand-lg navbar-light bg-light sticky-top">
+
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+
+            {% for segment_name in segments %}
+                <li class="nav-item{{ active is same as(segment_name) ? ' active' }}">
+                    <a class="nav-link "
+                       href="{{ path('admin_list', {'segment': segment_name}) }}">{{ segment_name }}</a>
+                </li>
+            {% endfor %}
+
+        </ul>
+    </div>
+</nav>

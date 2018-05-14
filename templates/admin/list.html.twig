@@ -2,14 +2,12 @@
 
 {% block content %}
 
-    <form method="get" novalidate autocomplete="off" id="filter-form"
-          action="{{ path('admin_list', {'segment': segment}) }}">
-        <div class="row">
+    <div class="row">
 
-            <div class="col-6">
-
+        <div class="col-3">
+            <form method="get" novalidate autocomplete="off" id="filter-form"
+                  action="{{ path('admin_list', {'segment': segment}) }}">
                 {{ form_errors(filter_form) }}
-
 
                 <ul class="list-unstyled">
                     {% for child in filter_form %}
@@ -21,57 +19,57 @@
                     {% endfor %}
                 </ul>
 
-
                 {{ form_rest(filter_form) }}
-            </div>
-
-            <div class="col-6">
                 <input type="hidden" name="page" value="1">
                 <button type="submit" class="btn btn-primary">Apply</button>
-            </div>
+            </form>
         </div>
 
-    </form>
+        <div class="col-9">
+            <table class="table">
+                <tr>
+                    {% for column in columns %}
+                        <th>{{ column }}</th>
+                    {% endfor %}
+                    <th>Actions</th>
+                </tr>
 
-    <table class="table">
-        <tr>
-            {% for column in columns %}
-                <th>{{ column }}</th>
-            {% endfor %}
-            <th>Actions</th>
-        </tr>
+                <tbody>
+                {% for entity in pager %}
+                    <tr>
+                        {% for column in columns %}
+                            <td>
+                                {% set value = attribute(entity, column) %}
 
-        <tbody>
-        {% for entity in pager %}
-            <tr>
-                {% for column in columns %}
-                    <td>
-                        {% set value = attribute(entity, column) %}
+                                {% if value is iterable %}
+                                    {{ value|join(', ') }}
+                                {% else %}
+                                    <span {% if value|length>20 %}title="{{ value }}"{% endif %}>{{ value|truncate(20) }} </span>
+                                {% endif %}
+                            </td>
+                        {% endfor %}
+                        <td>
 
-                        {% if value is iterable %}
-                            {{ value|join(', ') }}
-                        {% else %}
-                            {{ value }}
-                        {% endif %}
-                    </td>
+                            <a href="{{ path('admin_delete', {'id': entity.id, 'segment': segment}|merge(app.request.query.all)) }}">Delete</a>
+
+                            <a href="{{ path('admin_edit', {'id': entity.id, 'segment': segment}|merge(app.request.query.all)) }}">Edit</a>
+                        </td>
+                    </tr>
                 {% endfor %}
-                <td>
+                </tbody>
 
-                    <a href="{{ path('admin_delete', {'id': entity.id, 'segment': segment}|merge(app.request.query.all)) }}" >Delete</a>
+            </table>
 
-                    <a href="{{ path('admin_edit', {'id': entity.id, 'segment': segment}|merge(app.request.query.all)) }}">Edit</a>
-                </td>
-            </tr>
-        {% endfor %}
-        </tbody>
+            {{ pagerfanta(pager, 'twitter_bootstrap4') }}
 
-    </table>
+            {% if pager.beyondRange %}
+                <p class="alert alert-info">
+                    Total results in database: {{ pager.total|number_format }}
+                </p>
+            {% endif %}
+        </div>
+    </div>
 
-    {{ pagerfanta(pager, 'twitter_bootstrap4') }}
 
-    {% if pager.beyondRange %}
-        <p class="alert alert-info">
-            Total results in database: {{ pager.total|number_format }}
-        </p>
-    {% endif %}
+
 {% endblock %}

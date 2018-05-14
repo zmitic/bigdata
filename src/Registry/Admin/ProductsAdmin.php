@@ -50,7 +50,7 @@ class ProductsAdmin implements AdminInterface
 
     public function deleteOne(object $entity): void
     {
-        $this->repository->remove($entity);
+        $this->repository->remove($entity, true);
     }
 
     public function updateOne(object $entity): void

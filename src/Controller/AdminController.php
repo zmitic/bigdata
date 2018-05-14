@@ -129,7 +129,7 @@ class AdminController extends Controller
         ]);
     }
 
-    public function navLeft(Admin $admin, RequestStack $requestStack): Response
+    public function navigation(Admin $admin, RequestStack $requestStack): Response
     {
         $masterRequest = $requestStack->getMasterRequest();
         if (!$masterRequest) {
@@ -137,7 +137,7 @@ class AdminController extends Controller
         }
         $segments = $admin->getSegmentNames();
 
-        return $this->render('admin/navigation_left.html.twig', [
+        return $this->render('admin/_navigation.html.twig', [
             'segments' => $segments,
             'active' => $masterRequest->attributes->getAlpha('segment'),
         ]);

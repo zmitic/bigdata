@@ -110,7 +110,7 @@ abstract class BaseRepository extends ServiceEntityRepository
         yield Criteria::expr()->in('id', $ids);
     }
 
-    public function remove(object $entity, bool $flush = true): void
+    public function remove(object $entity, bool $flush = false): void
     {
         $this->getEntityManager()->remove($entity);
         if ($flush) {
