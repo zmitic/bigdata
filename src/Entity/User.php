@@ -2,12 +2,15 @@
 
 namespace App\Entity;
 
+use App\Annotation\Counted;
 use Doctrine\ORM\Mapping as ORM;
 use FOS\UserBundle\Model\User as BaseUser;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
  * @ORM\Table(name="tbl_user")
+ *
+ * @Counted(name="user")
  */
 class User extends BaseUser
 {

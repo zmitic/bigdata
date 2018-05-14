@@ -19,6 +19,7 @@ class ProductRepository extends BaseRepository
         yield from $this->whereManufacturer($filters['manufacturer'] ?? null);
         yield from $this->whereMinPrice($filters['min_price'] ?? null);
         yield from $this->whereMaxPrice($filters['max_price'] ?? null);
+        yield from $this->whereInCategories($filters['categories'] ?? []);
     }
 
     private function whereMinPrice(?float $minPrice): ?iterable
@@ -38,6 +39,16 @@ class ProductRepository extends BaseRepository
         if ($manufacturer) {
             yield [$this->expr()->eq('o.manufacturer', ':man'), 'man' => $manufacturer];
         }
+    }
+
+    private function whereInCategories(array $categories): iterable
+    {
+        $qb = $this->createQueryBuilder('s1')
+            ->innerJoin('s1.categoryReferences', 's1_ref', 'WITH', 's1_ref.category IN (:categories)');
+
+        return [
+            $this->make($this->expr()->in('o', $qb->getDQL()), ['categories' => $categories], $categories),
+        ];
     }
 
     public function optimizeJoinsOn(array $products): void

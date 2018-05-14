@@ -1,3 +1,10 @@
 $brand-primary: darken(#428bca, 20%);
 
 @import '~bootstrap/dist/css/bootstrap.css';
+@import "~select2/dist/css/select2.min.css";
+@import "~select2-bootstrap-css/select2-bootstrap";
+
+a.confirm {
+  cursor: pointer;
+  color: red !important;
+}

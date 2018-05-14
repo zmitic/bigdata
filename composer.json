@@ -30,6 +30,7 @@
         "symfony/web-server-bundle": "^4.0",
         "symfony/webpack-encore-pack": "*",
         "symfony/yaml": "^4.0",
+        "tetranz/select2entity-bundle": "^2.9",
         "white-october/pagerfanta-bundle": "^1.1"
     },
     "require-dev": {

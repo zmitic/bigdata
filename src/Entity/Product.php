@@ -6,6 +6,7 @@ use App\Annotation\Counted;
 use App\Model\IdentifiableEntityTrait;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use function in_array;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\ProductRepository")
@@ -32,7 +33,8 @@ class Product
     private $manufacturer;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\ProductCategoryReference", mappedBy="product")
+     * @var ProductCategoryReference[] | ArrayCollection
+     * @ORM\OneToMany(targetEntity="App\Entity\ProductCategoryReference", mappedBy="product", cascade={"persist"}, orphanRemoval=true)
      */
     private $categoryReferences;
 
@@ -54,7 +56,7 @@ class Product
         return $this->name;
     }
 
-    public function setName(string $name): void
+    public function setName(?string $name): void
     {
         $this->name = $name;
     }
@@ -77,12 +79,31 @@ class Product
         }, $this->categoryReferences->toArray());
     }
 
+    public function addCategory(Category $category): void
+    {
+        if (in_array($category, $this->getCategories(), true)) {
+            return;
+        }
+        $this->categoryReferences->add(new ProductCategoryReference($this, $category));
+    }
+
+    public function removeCategory(Category $category): void
+    {
+        /** @var ProductCategoryReference[] $categoryReferences */
+        $categoryReferences = $this->categoryReferences->toArray();
+        foreach ($categoryReferences as $reference) {
+            if ($reference->getCategory() === $category) {
+                $this->categoryReferences->removeElement($reference);
+            }
+        }
+    }
+
     public function getBasePrice(): float
     {
         return $this->basePrice;
     }
 
-    public function setBasePrice(float $basePrice): void
+    public function setBasePrice(?float $basePrice): void
     {
         $this->basePrice = $basePrice;
     }

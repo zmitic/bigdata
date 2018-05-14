@@ -28,7 +28,7 @@ abstract class BaseRepository extends ServiceEntityRepository
         return $this->_em->getExpressionBuilder();
     }
 
-    protected function make($expression, array $parameters, $condition = true)
+    protected function make($expression, array $parameters = [], $condition = true)
     {
         if (!$condition) {
             return null;
@@ -48,6 +48,19 @@ abstract class BaseRepository extends ServiceEntityRepository
         return $this->paginator->paginate($qb, $page, $limit);
     }
 
+    public function getResults(?iterable ...$generators): array
+    {
+        $qb = $this->createQueryBuilder('o');
+        $this->appendGeneratorsToQB($qb, ...$generators);
+
+        return $qb->getQuery()->getResult();
+    }
+
+    public function setMaxResults(int $maxResults)
+    {
+        yield Criteria::create()->setMaxResults($maxResults);
+    }
+
     private function appendGeneratorsToQB(QueryBuilder $qb, ?iterable ...$generators): void
     {
         $operators = [];
@@ -55,9 +68,13 @@ abstract class BaseRepository extends ServiceEntityRepository
             if ($generator) {
                 foreach ($generator as $expression) {
                     if ($expression) {
-                        $operators[] = array_shift($expression);
-                        foreach ($expression as $parameter => $value) {
-                            $qb->setParameter($parameter, $value);
+                        if ($expression instanceof Criteria) {
+                            $qb->addCriteria($expression);
+                        } else {
+                            $operators[] = array_shift($expression);
+                            foreach ($expression as $parameter => $value) {
+                                $qb->setParameter($parameter, $value);
+                            }
                         }
                     }
                 }
@@ -67,17 +84,6 @@ abstract class BaseRepository extends ServiceEntityRepository
         if ($operators) {
             $qb->andWhere(...$operators);
         }
-    }
-
-    public function getResults(?Generator ...$generators): array
-    {
-        $criteria = Criteria::create();
-        $expressions = $this->convertGeneratorsToExpressions(...$generators);
-        if ($expressions) {
-            $criteria->andWhere(Criteria::expr()->andX(...$expressions));
-        }
-
-        return $this->matching($criteria)->toArray();
     }
 
     public function orX(?Generator ...$generators): ?Generator

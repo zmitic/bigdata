@@ -10,7 +10,7 @@ class Pager extends Pagerfanta
 
     public function getTotal(): int
     {
-        return $this->total;
+        return (int) $this->total;
     }
 
     public function setTotal(?int $total): void
@@ -20,11 +20,11 @@ class Pager extends Pagerfanta
 
     public function isBeyondRange(): bool
     {
-        if (null === $this->total) {
+        if (0 === $this->getNbResults()) {
             return false;
         }
         $count = $this->count();
 
-        return $this->total > $count;
+        return $count >= 1000;
     }
 }

@@ -1,6 +1,7 @@
 const $ = require('jquery');
-// JS is equivalent to the normal "bootstrap" package
 const Barba = require('barba.js');
+require('select2');
+require('./select2entity-fork');
 
 Barba.Dispatcher.on('newPageReady', function (current, prev, rawContainer) {
     let container = $(rawContainer);

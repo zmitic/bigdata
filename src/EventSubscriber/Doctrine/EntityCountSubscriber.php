@@ -22,6 +22,7 @@ class EntityCountSubscriber implements EventSubscriber
     {
         return [
             'prePersist',
+            'preRemove',
         ];
     }
 
@@ -29,6 +30,12 @@ class EntityCountSubscriber implements EventSubscriber
     {
         $entity = $args->getObject();
         $this->inc($entity, $args->getObjectManager());
+    }
+
+    public function preRemove(LifecycleEventArgs $args): void
+    {
+        $entity = $args->getObject();
+        $this->dec($entity, $args->getObjectManager());
     }
 
     private function inc(object $entity, ObjectManager $em): void
@@ -39,6 +46,16 @@ class EntityCountSubscriber implements EventSubscriber
 
         $counter = $this->findCounterFor($id, $em);
         $counter->inc();
+    }
+
+    private function dec(object $entity, ObjectManager $em): void
+    {
+        if (!$id = $this->storage->findIdForEntity($entity)) {
+            return;
+        }
+
+        $counter = $this->findCounterFor($id, $em);
+        $counter->dec();
     }
 
     private function findCounterFor(string $id, ObjectManager $em): Counter

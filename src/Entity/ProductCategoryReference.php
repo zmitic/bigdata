@@ -15,11 +15,13 @@ class ProductCategoryReference
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Product", inversedBy="categoryReferences")
+     * @ORM\JoinColumn(onDelete="CASCADE")
      */
     private $product;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Category", inversedBy="productReferences")
+     * @ORM\JoinColumn(onDelete="CASCADE")
      */
     private $category;
 

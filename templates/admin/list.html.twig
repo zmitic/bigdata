@@ -2,7 +2,8 @@
 
 {% block content %}
 
-    <form method="get" novalidate autocomplete="off">
+    <form method="get" novalidate autocomplete="off" id="filter-form"
+          action="{{ path('admin_list', {'segment': segment}) }}">
         <div class="row">
 
             <div class="col-6">
@@ -32,8 +33,6 @@
 
     </form>
 
-
-
     <table class="table">
         <tr>
             {% for column in columns %}
@@ -57,8 +56,10 @@
                     </td>
                 {% endfor %}
                 <td>
-                    Delete
-                    Edit
+
+                    <a href="{{ path('admin_delete', {'id': entity.id, 'segment': segment}|merge(app.request.query.all)) }}" >Delete</a>
+
+                    <a href="{{ path('admin_edit', {'id': entity.id, 'segment': segment}|merge(app.request.query.all)) }}">Edit</a>
                 </td>
             </tr>
         {% endfor %}

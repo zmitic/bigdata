@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\Annotation\Counted;
 use App\Model\IdentifiableEntityTrait;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
@@ -10,6 +11,8 @@ use function in_array;
 /**
  * @ORM\Entity(repositoryClass="App\Repository\CategoryRepository")
  * @ORM\Table(name="tbl_category")
+ *
+ * @Counted(name="category")
  */
 class Category
 {
