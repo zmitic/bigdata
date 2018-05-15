@@ -6,7 +6,7 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\CounterRepository")
- * @ORM\Table(name="tbl_entity_counter")
+ * @ORM\Table(name="wjb_entity_counter")
  */
 class Counter
 {

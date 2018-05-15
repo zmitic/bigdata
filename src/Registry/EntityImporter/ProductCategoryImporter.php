@@ -10,8 +10,6 @@ use Doctrine\ORM\EntityManagerInterface;
 
 class ProductCategoryImporter implements EntityImporterInterface
 {
-    public const LIMIT = 1000;
-
     /** @var EntityManagerInterface */
     private $em;
 
@@ -27,7 +25,7 @@ class ProductCategoryImporter implements EntityImporterInterface
 
     public function getProgressBarTotal(): int
     {
-        return self::LIMIT;
+        return ProductsImporter::LIMIT;
     }
 
     public function getName(): string

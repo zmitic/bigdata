@@ -14,6 +14,11 @@ class ProductRepository extends BaseRepository
         parent::__construct($registry, Product::class);
     }
 
+    public function whereNameLike(?string $name): iterable
+    {
+        yield $this->make($this->expr()->like('o.name', ':name'), ['name' => $name.'%'], $name);
+    }
+
     public function applyFilters(array $filters): ?iterable
     {
         yield from $this->whereManufacturer($filters['manufacturer'] ?? null);

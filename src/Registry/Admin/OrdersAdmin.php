@@ -2,14 +2,11 @@
 
 namespace App\Registry\Admin;
 
-use App\Entity\Category;
-use App\Entity\Order;
 use App\Model\AdminInterface;
 use App\Model\FilterFormModel;
 use App\Repository\OrderRepository;
 use App\Service\FiltersHandler;
 use App\Service\Paginator\Pager;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -59,9 +56,9 @@ class OrdersAdmin implements AdminInterface
         $this->repository->flush();
     }
 
-    public function create(Request $request): object
+    public function create(Request $request): ?object
     {
-        return new Order();
+        return null;
     }
 
     public function setFormBuilder(FormBuilderInterface $formBuilder): void

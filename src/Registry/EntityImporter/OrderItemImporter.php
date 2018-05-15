@@ -3,11 +3,12 @@
 namespace App\Registry\EntityImporter;
 
 use App\Entity\Order;
-use App\Entity\User;
+use App\Entity\OrderItem;
+use App\Entity\Product;
 use App\Model\Importer\EntityImporterInterface;
 use Doctrine\ORM\EntityManagerInterface;
 
-class OrderImporter implements EntityImporterInterface
+class OrderItemImporter implements EntityImporterInterface
 {
     /** @var EntityManagerInterface */
     private $em;
@@ -19,7 +20,7 @@ class OrderImporter implements EntityImporterInterface
 
     public function getOrder(): int
     {
-        return 6;
+        return 7;
     }
 
     public function getProgressBarTotal(): int
@@ -29,17 +30,21 @@ class OrderImporter implements EntityImporterInterface
 
     public function getName(): string
     {
-        return 'orders';
+        return 'order_item';
     }
 
     public function getEntities(): iterable
     {
         $total = $this->getProgressBarTotal();
         for ($i = 0; $i < $total; ++$i) {
-            /** @var User $user */
-            $user = $this->em->getReference(User::class, random_int(1, UserImporter::LIMIT));
-            $order = new Order($user);
-            yield $order;
+            /** @var Order $order */
+            $order = $this->em->getReference(Order::class, random_int(1, ProductsImporter::LIMIT));
+
+            /** @var Product $product */
+            $product = $this->em->getReference(Product::class, random_int(1, ProductsImporter::LIMIT));
+            $orderItem = new OrderItem($order, $product, random_int(1, 10));
+
+            yield $orderItem;
         }
     }
 }

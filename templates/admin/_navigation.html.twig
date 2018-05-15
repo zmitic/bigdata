@@ -2,16 +2,16 @@
 
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto">
-
             {% for segment_name in segments %}
                 <li class="nav-item{{ active is same as(segment_name) ? ' active' }}">
                     <a class="nav-link "
                        href="{{ path('admin_list', {'segment': segment_name}) }}">{{ segment_name }}</a>
                 </li>
             {% endfor %}
-
         </ul>
 
-        <a class="btn btn-primary my-2 my-sm-0" href="{{ path('admin_create', {'segment': active}) }}">Create</a>
+        {% if active and can_be_created %}
+            <a class="btn btn-primary my-2 my-sm-0" href="{{ path('admin_create', {'segment': active }) }}">Create</a>
+        {% endif %}
     </div>
 </nav>

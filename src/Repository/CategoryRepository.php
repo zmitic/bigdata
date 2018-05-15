@@ -17,4 +17,14 @@ class CategoryRepository extends BaseRepository
     {
         yield $this->make($this->expr()->like('o.name', ':name'), ['name' => $name.'%'], $name);
     }
+
+    public function applyFilters($filters): ?iterable
+    {
+        yield from $this->whereMinNrOfProducts($filters['min_nr_of_products'] ?? null);
+    }
+
+    private function whereMinNrOfProducts($nrOfProducts): ?iterable
+    {
+        yield $this->make($this->expr()->gte('o.nrOfProducts', ':min_nr_of_products'), ['min_nr_of_products' => $nrOfProducts], $nrOfProducts);
+    }
 }

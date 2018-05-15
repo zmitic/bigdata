@@ -25,7 +25,7 @@ interface AdminInterface
 
     public function persist(object $entity): void;
 
-    public function create(Request $request): object;
+    public function create(Request $request): ?object;
 
     public function setFormBuilder(FormBuilderInterface $formBuilder): void;
 }

@@ -7,20 +7,22 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity()
- * @ORM\Table(name="tbl_product_category")
+ * @ORM\Table(name="tbl_product_category",
+ *      )
+ * @ORM\HasLifecycleCallbacks()
  */
 class ProductCategoryReference
 {
     use IdentifiableEntityTrait;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Product", inversedBy="categoryReferences")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Product", inversedBy="categoryReferences", fetch="EAGER")
      * @ORM\JoinColumn(onDelete="CASCADE")
      */
     private $product;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Category", inversedBy="productReferences")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Category", inversedBy="productReferences", fetch="EAGER")
      * @ORM\JoinColumn(onDelete="CASCADE")
      */
     private $category;
@@ -29,6 +31,14 @@ class ProductCategoryReference
     {
         $this->product = $product;
         $this->category = $category;
+    }
+
+    /**
+     * @ORM\PrePersist()
+     */
+    public function incOnInsert(): void
+    {
+        $this->getCategory()->incNrOfProducts();
     }
 
     public function getProduct(): Product

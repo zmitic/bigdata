@@ -42,7 +42,7 @@ class ManufacturersAdmin implements AdminInterface
         $this->repository->remove($entity, true);
     }
 
-    public function create(Request $request): object
+    public function create(Request $request): ?object
     {
         return new Manufacturer();
     }

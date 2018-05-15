@@ -26,9 +26,12 @@ class Category
     /**
      * @var ArrayCollection|ProductCategoryReference[]
      *
-     * @ORM\OneToMany(targetEntity="App\Entity\ProductCategoryReference", mappedBy="category")
+     * @ORM\OneToMany(targetEntity="App\Entity\ProductCategoryReference", mappedBy="category", cascade={"persist"}, orphanRemoval=true, fetch="EXTRA_LAZY")
      */
     private $productReferences;
+
+    /** @ORM\Column(type="integer") */
+    private $nrOfProducts = 0;
 
     public function __construct()
     {
@@ -65,6 +68,7 @@ class Category
         }
         $ref = new ProductCategoryReference($product, $this);
         $this->productReferences->add($ref);
+        $product->addReference($ref);
     }
 
     public function removeProduct(Product $product): void
@@ -73,7 +77,22 @@ class Category
         foreach ($refs as $ref) {
             if ($ref->getProduct() === $product) {
                 $this->productReferences->removeElement($ref);
+                $product->removeReference($ref);
+                --$this->nrOfProducts;
             }
         }
+    }
+
+    public function getNrOfProducts(): int
+    {
+        return $this->nrOfProducts;
+    }
+
+    /**
+     * @internal
+     */
+    public function incNrOfProducts(): void
+    {
+        ++$this->nrOfProducts;
     }
 }

@@ -61,7 +61,7 @@ class ProductsAdmin implements AdminInterface
         $this->repository->flush();
     }
 
-    public function create(Request $request): object
+    public function create(Request $request): ?object
     {
         return new Product();
     }

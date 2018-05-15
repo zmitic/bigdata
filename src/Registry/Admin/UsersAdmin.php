@@ -2,36 +2,34 @@
 
 namespace App\Registry\Admin;
 
-use App\Entity\Category;
-use App\Form\Type\Category\ProductSelect2Type;
+use App\Entity\User;
 use App\Model\AdminInterface;
 use App\Model\FilterFormModel;
-use App\Repository\CategoryRepository;
+use App\Repository\UserRepository;
 use App\Service\FiltersHandler;
 use App\Service\Paginator\Pager;
-use Symfony\Component\Form\Extension\Core\Type\IntegerType;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\MoneyType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\HttpFoundation\Request;
 
-class CategoriesAdmin implements AdminInterface
+class UsersAdmin implements AdminInterface
 {
-    /** @var CategoryRepository */
+    /** @var UserRepository */
     private $repository;
 
-    public function __construct(CategoryRepository $repository)
+    public function __construct(UserRepository $repository)
     {
         $this->repository = $repository;
     }
 
     public function getName(): string
     {
-        return 'categories';
+        return 'users';
     }
 
     public function getColumnsList(): array
     {
-        return ['name', 'nrOfProducts'];
+        return ['username', 'spent'];
     }
 
     public function getPager(int $page, array $filters): Pager
@@ -42,11 +40,17 @@ class CategoriesAdmin implements AdminInterface
     public function getFilterForm(FiltersHandler $filtersHandler): FilterFormModel
     {
         return $filtersHandler->begin([])
-            ->add('min_nr_of_products', IntegerType::class, [
+            ->add('min_spent', MoneyType::class, [
                 'attr' => [
-                    'placeholder' => 'Min number of products',
+                    'placeholder' => 'Min spent',
                 ],
-            ]);
+            ])
+            ->add('max_spent', MoneyType::class, [
+                'attr' => [
+                    'placeholder' => 'Max spent',
+                ],
+            ])
+            ;
     }
 
     public function findOne(string $id): ?object
@@ -67,13 +71,11 @@ class CategoriesAdmin implements AdminInterface
 
     public function create(Request $request): ?object
     {
-        return new Category();
+        return new User();
     }
 
     public function setFormBuilder(FormBuilderInterface $formBuilder): void
     {
-        $formBuilder
-            ->add('name', TextType::class)
-            ->add('products', ProductSelect2Type::class);
+        $formBuilder->add('spent', MoneyType::class);
     }
 }

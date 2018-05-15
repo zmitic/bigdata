@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\Annotation\Counted;
 use App\Model\IdentifiableEntityTrait;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
@@ -10,6 +11,8 @@ use Gedmo\Timestampable\Traits\TimestampableEntity;
 /**
  * @ORM\Entity(repositoryClass="App\Repository\OrderRepository")
  * @ORM\Table(name="tbl_order")
+ *
+ * @Counted(name="order")
  */
 class Order
 {

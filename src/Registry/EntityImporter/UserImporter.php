@@ -7,7 +7,7 @@ use App\Model\Importer\EntityImporterInterface;
 
 class UserImporter implements EntityImporterInterface
 {
-    public const LIMIT = 1000;
+    public const LIMIT = 500000;
 
     public function getOrder(): int
     {

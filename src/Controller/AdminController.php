@@ -28,7 +28,7 @@ class AdminController extends Controller
     }
 
     /**
-     * @Route("/admin", name="admin")
+     * @Route("/", name="admin")
      * @Method("GET")
      */
     public function admin(): Response
@@ -101,6 +101,9 @@ class AdminController extends Controller
         $segment = $request->attributes->getAlpha('segment');
         $config = $this->admin->getConfigForSegment($segment);
         $entity = $config->create($request);
+        if (!$entity) {
+            throw $this->createNotFoundException();
+        }
         $formBuilder = $this->createFormBuilder($entity);
         $config->setFormBuilder($formBuilder);
         $form = $formBuilder->getForm();
@@ -162,10 +165,19 @@ class AdminController extends Controller
             throw new \LogicException('You must embed this action.');
         }
         $segments = $this->admin->getSegmentNames();
+        $active = $masterRequest->attributes->getAlpha('segment');
+
+        if (!$active) {
+            $canBeCreated = false;
+        } else {
+            $entity = $this->admin->getConfigForSegment($active)->create($masterRequest);
+            $canBeCreated = (bool) $entity;
+        }
 
         return $this->render('admin/_navigation.html.twig', [
             'segments' => $segments,
-            'active' => $masterRequest->attributes->getAlpha('segment'),
+            'active' => $active,
+            'can_be_created' => $canBeCreated,
         ]);
     }
 }

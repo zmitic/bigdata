@@ -26,7 +26,6 @@ class User
     /** @ORM\Column(type="string") */
     private $username;
 
-
     /** @ORM\Column(type="decimal", nullable=true) */
     private $spent = 0;
 
@@ -48,5 +47,10 @@ class User
     public function setUsername(?string $username): void
     {
         $this->username = $username;
+    }
+
+    public function getId(): ?string
+    {
+        return $this->id;
     }
 }

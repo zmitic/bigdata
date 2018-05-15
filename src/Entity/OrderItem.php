@@ -4,16 +4,15 @@ namespace App\Entity;
 
 use App\Model\IdentifiableEntityTrait;
 use Doctrine\ORM\Mapping as ORM;
-use Gedmo\Timestampable\Traits\TimestampableEntity;
 
 /**
  * @ORM\Entity()
  * @ORM\Table(name="tbl_order_item")
+ * @ORM\HasLifecycleCallbacks()
  */
 class OrderItem
 {
     use IdentifiableEntityTrait;
-    use TimestampableEntity;
 
     /** @ORM\ManyToOne(targetEntity="App\Entity\Order", inversedBy="items") */
     private $order;
@@ -34,6 +33,15 @@ class OrderItem
         $this->order = $order;
         $this->product = $product;
         $this->quantity = $quantity;
+    }
+
+    /**
+     * @ORM\PrePersist()
+     */
+    public function updateSpentMoney(): void
+    {
+        $buyer = $this->order->getBuyer();
+        $buyer->increaseSpent($this->getProduct()->getBasePrice() * $this->quantity);
     }
 
     public function getProduct(): Product

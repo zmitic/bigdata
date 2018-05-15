@@ -34,7 +34,7 @@ class Product
 
     /**
      * @var ProductCategoryReference[] | ArrayCollection
-     * @ORM\OneToMany(targetEntity="App\Entity\ProductCategoryReference", mappedBy="product", cascade={"persist"}, orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity="App\Entity\ProductCategoryReference", mappedBy="product", cascade={"persist"}, orphanRemoval=true, fetch="EXTRA_LAZY")
      */
     private $categoryReferences;
 
@@ -84,7 +84,7 @@ class Product
         if (in_array($category, $this->getCategories(), true)) {
             return;
         }
-        $this->categoryReferences->add(new ProductCategoryReference($this, $category));
+        $category->addProduct($this);
     }
 
     public function removeCategory(Category $category): void
@@ -93,7 +93,7 @@ class Product
         $categoryReferences = $this->categoryReferences->toArray();
         foreach ($categoryReferences as $reference) {
             if ($reference->getCategory() === $category) {
-                $this->categoryReferences->removeElement($reference);
+                $category->removeProduct($this);
             }
         }
     }
@@ -106,5 +106,21 @@ class Product
     public function setBasePrice(?float $basePrice): void
     {
         $this->basePrice = $basePrice;
+    }
+
+    /**
+     * @internal
+     */
+    public function addReference(ProductCategoryReference $reference): void
+    {
+        $this->categoryReferences->add($reference);
+    }
+
+    /**
+     * @internal
+     */
+    public function removeReference(ProductCategoryReference $reference): void
+    {
+        $this->categoryReferences->removeElement($reference);
     }
 }
