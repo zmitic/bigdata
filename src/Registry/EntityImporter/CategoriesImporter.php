@@ -7,14 +7,16 @@ use App\Model\Importer\EntityImporterInterface;
 
 class CategoriesImporter implements EntityImporterInterface
 {
+    public const LIMIT = 10000;
+
     public function getOrder(): int
     {
         return 0;
     }
 
-    public function getTotal(): int
+    public function getProgressBarTotal(): int
     {
-        return 10000;
+        return self::LIMIT;
     }
 
     public function getName(): string
@@ -24,7 +26,7 @@ class CategoriesImporter implements EntityImporterInterface
 
     public function getEntities(): iterable
     {
-        $total = $this->getTotal();
+        $total = $this->getProgressBarTotal();
         for ($i = 0; $i < $total; ++$i) {
             $category = new Category();
             $category->setName(sprintf('Category_%04d', random_int(1, $total)));

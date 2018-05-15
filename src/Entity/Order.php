@@ -21,9 +21,32 @@ class Order
      */
     private $items;
 
-    public function __construct()
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\User")
+     * @ORM\JoinColumn(onDelete="CASCADE")
+     */
+    private $buyer;
+
+    public function __construct(User $buyer)
     {
         $this->items = new ArrayCollection();
+        $this->buyer = $buyer;
+    }
+
+    public function addProduct(Product $product, int $quantity): void
+    {
+        foreach ($this->getItems() as $item) {
+            if ($item->getProduct() === $product) {
+                $item->addQuantity($quantity);
+                $this->getBuyer()->increaseSpent($product->getBasePrice());
+
+                return;
+            }
+        }
+
+        $item = new OrderItem($this, $product, $quantity);
+        $this->items->add($item);
+        $this->getBuyer()->increaseSpent($product->getBasePrice() * $quantity);
     }
 
     /** @return OrderItem[] */
@@ -32,22 +55,13 @@ class Order
         return $this->items->toArray();
     }
 
-    public function addProduct(Product $product, int $quantity): void
-    {
-        foreach ($this->getItems() as $item) {
-            if ($item->getProduct() === $product) {
-                $item->addQuantity($quantity);
-
-                return;
-            }
-        }
-
-        $item = new OrderItem($this, $product, $quantity);
-        $this->items->add($item);
-    }
-
     public function addItem(OrderItem $item): void
     {
         $this->items->add($item);
+    }
+
+    public function getBuyer(): User
+    {
+        return $this->buyer;
     }
 }

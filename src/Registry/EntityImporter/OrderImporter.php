@@ -2,13 +2,13 @@
 
 namespace App\Registry\EntityImporter;
 
-use App\Entity\Category;
-use App\Entity\ProductCategoryReference;
+use App\Entity\Order;
 use App\Entity\Product;
+use App\Entity\User;
 use App\Model\Importer\EntityImporterInterface;
 use Doctrine\ORM\EntityManagerInterface;
 
-class ProductCategoryImporter implements EntityImporterInterface
+class OrderImporter implements EntityImporterInterface
 {
     public const LIMIT = 1000;
 
@@ -22,7 +22,7 @@ class ProductCategoryImporter implements EntityImporterInterface
 
     public function getOrder(): int
     {
-        return 5;
+        return 6;
     }
 
     public function getProgressBarTotal(): int
@@ -32,19 +32,24 @@ class ProductCategoryImporter implements EntityImporterInterface
 
     public function getName(): string
     {
-        return 'products_categories';
+        return 'orders';
     }
 
     public function getEntities(): iterable
     {
         $total = $this->getProgressBarTotal();
         for ($i = 0; $i < $total; ++$i) {
-            /** @var Product $product */
-            $product = $this->em->getReference(Product::class, random_int(1, ProductsImporter::LIMIT));
-            /** @var Category $category */
-            $category = $this->em->getReference(Category::class, random_int(1, CategoriesImporter::LIMIT));
-            $reference = new ProductCategoryReference($product, $category);
-            yield $reference;
+            /** @var User $user */
+            $user = $this->em->getReference(User::class, random_int(1, UserImporter::LIMIT));
+            $order = new Order($user);
+
+            $random = random_int(1, 6);
+            for ($j = 0; $j <= $random; ++$j) {
+                /** @var Product $product */
+                $product = $this->em->getReference(Product::class, random_int(1, ProductsImporter::LIMIT));
+                $order->addProduct($product, random_int(1, 5));
+            }
+            yield $order;
         }
     }
 }

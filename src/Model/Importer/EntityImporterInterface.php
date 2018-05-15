@@ -8,7 +8,7 @@ interface EntityImporterInterface
 
     public function getOrder(): int;
 
-    public function getTotal(): int;
+    public function getProgressBarTotal(): int;
 
     public function getName(): string;
 

@@ -4,7 +4,6 @@ namespace App\Entity;
 
 use App\Annotation\Counted;
 use Doctrine\ORM\Mapping as ORM;
-use FOS\UserBundle\Model\User as BaseUser;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
@@ -12,7 +11,7 @@ use FOS\UserBundle\Model\User as BaseUser;
  *
  * @Counted(name="user")
  */
-class User extends BaseUser
+class User
 {
     /**
      * @ORM\Id
@@ -23,4 +22,31 @@ class User extends BaseUser
      * ORM\CustomIdGenerator(class="Ramsey\Uuid\Doctrine\UuidOrderedTimeGenerator"))
      */
     protected $id;
+
+    /** @ORM\Column(type="string") */
+    private $username;
+
+
+    /** @ORM\Column(type="decimal", nullable=true) */
+    private $spent = 0;
+
+    public function getSpent(): float
+    {
+        return (float) $this->spent;
+    }
+
+    public function increaseSpent(float $spent): void
+    {
+        $this->spent += $spent;
+    }
+
+    public function getUsername(): ?string
+    {
+        return $this->username;
+    }
+
+    public function setUsername(?string $username): void
+    {
+        $this->username = $username;
+    }
 }

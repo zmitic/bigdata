@@ -40,7 +40,7 @@ class EntitiesImporter
 
     private function importOne(EntityImporterInterface $importer, SymfonyStyle $io): void
     {
-        $total = $importer->getTotal();
+        $total = $importer->getProgressBarTotal();
         $name = $importer->getName();
         $progressBar = new StopwatchProgressBar($io, $name, $total);
 

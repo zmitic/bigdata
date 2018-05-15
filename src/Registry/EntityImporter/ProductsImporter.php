@@ -12,6 +12,8 @@ class ProductsImporter implements EntityImporterInterface
     /** @var EntityManagerInterface */
     private $em;
 
+    public const LIMIT = 10000;
+
     public function __construct(EntityManagerInterface $em)
     {
         $this->em = $em;
@@ -22,9 +24,9 @@ class ProductsImporter implements EntityImporterInterface
         return 3;
     }
 
-    public function getTotal(): int
+    public function getProgressBarTotal(): int
     {
-        return 10000000;
+        return self::LIMIT;
     }
 
     public function getName(): string
@@ -34,10 +36,10 @@ class ProductsImporter implements EntityImporterInterface
 
     public function getEntities(): iterable
     {
-        $total = $this->getTotal();
+        $total = $this->getProgressBarTotal();
         for ($i = 0; $i < $total; ++$i) {
             /** @var Manufacturer $manufacturer */
-            $manufacturer = $this->em->getReference(Manufacturer::class, random_int(1, 10000));
+            $manufacturer = $this->em->getReference(Manufacturer::class, random_int(1, ManufacturersImporter::LIMIT));
             $product = new Product();
             $product->setBasePrice((float) random_int(1, 10000));
             $product->setManufacturer($manufacturer);
