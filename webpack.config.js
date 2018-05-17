@@ -17,6 +17,8 @@ Encore
     // uncomment for legacy applications that require $/jQuery as a global variable
     .autoProvidejQuery()
 
+    .autoProvideVariables({'Barba': 'barba.js'})
+
     .enableSassLoader(function (sassOptions) {}, {
         resolveUrlLoader: false
     })

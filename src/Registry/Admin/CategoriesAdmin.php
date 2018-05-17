@@ -13,6 +13,7 @@ use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Validator\Constraints\NotNull;
 
 class CategoriesAdmin implements AdminInterface
 {
@@ -73,7 +74,11 @@ class CategoriesAdmin implements AdminInterface
     public function setFormBuilder(FormBuilderInterface $formBuilder): void
     {
         $formBuilder
-            ->add('name', TextType::class)
+            ->add('name', TextType::class, [
+                'constraints' => [
+                    new NotNull(),
+                ],
+            ])
             ->add('products', ProductSelect2Type::class);
     }
 }

@@ -1,8 +1,7 @@
-const $ = require('jquery');
-const Barba = require('barba.js');
 require('jquery-form');
 
-$(document).on('dom_updated', function (event, dom) {
+$(document).on('dom_updated', function (event, dom, oldDom) {
+
     dom.find('.filter-form:not(.filter-form-initialized)').each(function () {
         $(this).addClass('filter-form-initialized');
         $(this).on('submit', function (event) {

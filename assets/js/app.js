@@ -1,10 +1,24 @@
 require('bootstrap-sass');
 require('./bridge/select2entity_brige');
 require('./bridge/ajax-form-bridge');
-const Barba = require('barba.js');
 
-Barba.Dispatcher.on('newPageReady', function (current, prev, rawContainer) {
+$.ajaxSetup({cache:false});
+$.ajaxSetup({ headers: { 'x-barba': 'yes' } });
+
+$.cache = {};
+$.expr.cacheLength = 1;
+
+Barba.Dispatcher.on('newPageReady', function (current, prev, rawContainer, old) {
     $(document).trigger('dom_updated', [$(rawContainer)]);
+
+    let oldDom = $(old);
+    oldDom.find('*').each(function () {
+        $(this).off();
+    });
+    oldDom.off();
+    oldDom.empty().remove();
+    Barba.BaseCache.reset();
+    $.cache = {};
 });
 
 $(document).ajaxComplete(function (event, xhr) {
