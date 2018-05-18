@@ -28,6 +28,6 @@ class EntitiesCounter
         /** @var Counter $counter */
         $counter = $this->repository->find($id);
 
-        return $counter->getCount();
+        return $counter ? $counter->getCount() : 0;
     }
 }

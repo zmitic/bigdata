@@ -1,4 +1,4 @@
-const Pjax = require('./bridge/pjax-fork');
+const Pjax = require('pjax');
 
 
 const pjaxInstance = new Pjax({

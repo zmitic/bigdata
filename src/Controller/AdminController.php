@@ -59,6 +59,35 @@ class AdminController extends AbstractController
     }
 
     /**
+     * @Route("/{segment}/create", name="admin_create")
+     */
+    public function create(Request $request): Response
+    {
+        $segment = $request->attributes->getAlpha('segment');
+        $config = $this->admin->getConfigForSegment($segment);
+        $entity = $config->create($request);
+        if (!$entity) {
+            throw $this->createNotFoundException();
+        }
+        $formBuilder = $this->createFormBuilder($entity);
+        $config->setFormBuilder($formBuilder);
+        $form = $formBuilder->getForm();
+        $response = new Response();
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $config->persist($entity);
+            $routeParams = array_merge(['segment' => $segment], $request->query->all());
+
+            return $this->redirectToRoute('admin_list', $routeParams);
+        }
+
+        return $this->render('admin/create.html.twig', [
+            'segment' => $segment,
+            'form' => $form->createView(),
+        ], $response);
+    }
+
+    /**
      * @Route("/{segment}/edit/{id}", name="admin_edit")
      * @Method(methods={"GET", "POST"})
      */
@@ -89,35 +118,6 @@ class AdminController extends AbstractController
         return $this->render('admin/edit.html.twig', [
             'segment' => $segment,
             'id' => $id,
-            'form' => $form->createView(),
-        ], $response);
-    }
-
-    /**
-     * @Route("/{segment}/create", name="admin_create")
-     */
-    public function create(Request $request): Response
-    {
-        $segment = $request->attributes->getAlpha('segment');
-        $config = $this->admin->getConfigForSegment($segment);
-        $entity = $config->create($request);
-        if (!$entity) {
-            throw $this->createNotFoundException();
-        }
-        $formBuilder = $this->createFormBuilder($entity);
-        $config->setFormBuilder($formBuilder);
-        $form = $formBuilder->getForm();
-        $response = new Response();
-        $form->handleRequest($request);
-        if ($form->isSubmitted() && $form->isValid()) {
-            $config->persist($entity);
-            $routeParams = array_merge(['segment' => $segment], $request->query->all());
-
-            return $this->redirectToRoute('admin_list', $routeParams);
-        }
-
-        return $this->render('admin/create.html.twig', [
-            'segment' => $segment,
             'form' => $form->createView(),
         ], $response);
     }
