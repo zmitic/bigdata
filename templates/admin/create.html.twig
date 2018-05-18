@@ -1,16 +1,16 @@
-{% extends app.request.headers.has('x-barba') ? 'admin/ajax_body.html.twig' : 'admin/base.html.twig' %}
-{#{% extends 'admin/base.html.twig' %}#}
+{% extends 'admin/base.html.twig' %}
+
 
 {% block content %}
 
     <div class="ajax-form-wrapper">
         <form action="{{ path('admin_create', {'segment': segment}|merge(app.request.query.all)) }}" method="post"
-              novalidate autocomplete="off" class="pjax">
+              novalidate autocomplete="off" data-pjax-trigger='["#content"]'>
             {{ form_errors(form) }}
             {{ form_rest(form) }}
 
             <a class="btn btn-danger pjax"
-               href="{{ path('admin_list', {'segment': segment}|merge(app.request.query.all)) }}">Cancel</a>
+               href="{{ path('admin_list', {'segment': segment}|merge(app.request.query.all)) }}" data-pjax-trigger='["#content"]'>Cancel</a>
             <button type="submit" class="btn btn-primary">Create</button>
         </form>
     </div>

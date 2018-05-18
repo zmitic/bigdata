@@ -1,28 +1,25 @@
 const Pjax = require('./bridge/pjax-fork');
 
+
 let pjaxInstance;
 
 var initButtons = function () {
-    var buttons = document.querySelectorAll('button[data-manual-trigger]');
-
+    var buttons = document.querySelectorAll('a[data-pjax-trigger]');
     if (!buttons) {
         return;
     }
 
     // jshint -W083
     for (var i = 0; i < buttons.length; i++) {
-        buttons[i].addEventListener("click", function (e) {
-            var el = e.currentTarget;
+        buttons[i].addEventListener('click', function (event) {
+            event.preventDefault();
+            var el = event.currentTarget;
+            let blocks = JSON.parse(el.getAttribute('data-pjax-trigger'));
 
-            if (el.getAttribute('data-manual-trigger-override') === "true") {
-                // Manually load URL with overridden Pjax instance options
-                pjaxInstance.loadUrl('/example/page2.html', {cacheBust: false})
-            }
-            else {
-                // Manually load URL with current Pjax instance options
-                pjaxInstance.loadUrl('/example/page2.html');
-            }
-        })
+            let url = el.getAttribute('href');
+            pjaxInstance.options.selectors = blocks;
+            pjaxInstance.loadUrl(url, {selectors: blocks});
+        });
     }
     // jshint +W083
 };
@@ -34,7 +31,6 @@ document.addEventListener('pjax:send', function () {
 });
 
 document.addEventListener('pjax:complete', function () {
-    console.log(arguments)
 });
 
 document.addEventListener('pjax:error', function () {
@@ -43,13 +39,15 @@ document.addEventListener('pjax:error', function () {
 
 document.addEventListener('DOMContentLoaded', function () {
     pjaxInstance = new Pjax({
-        elements: ['.pjax'],
-        selectors: ['#content', '#test'],
-        cacheBust: false
+        elements: ['form[data-pjax-trigger]'],
+        // selectors: ['#content', '#test'],
+        cacheBust: false,
+        debug: false
     });
     initButtons();
 });
 
-$( document ).ajaxComplete(function () {
-   console.log(arguments);
+document.addEventListener("pjax:success", function () {
+    initButtons();
 });
+

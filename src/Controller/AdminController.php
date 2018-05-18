@@ -2,14 +2,12 @@
 
 namespace App\Controller;
 
-use App\Response\BarbaRedirectResponse;
 use App\Service\Admin;
 use App\Service\FiltersHandler;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
-use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
@@ -18,7 +16,7 @@ use Symfony\Component\Validator\Constraints\IsTrue;
 /**
  * @Route("/admin")
  */
-class AdminController extends Controller
+class AdminController extends AbstractController
 {
     /** @var Admin */
     private $admin;

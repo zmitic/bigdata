@@ -1,5 +1,6 @@
 {% extends 'admin/base.html.twig' %}
 
+
 {% block content %}
 
     <div class="row">
@@ -54,7 +55,7 @@
 
                             <a href="{{ path('admin_delete', {'id': entity.id, 'segment': segment}|merge(app.request.query.all)) }}" class="pjax">Delete</a>
 
-                            <a href="{{ path('admin_edit', {'id': entity.id, 'segment': segment}|merge(app.request.query.all)) }}" class="pjax">Edit</a>
+                            <a href="{{ path('admin_edit', {'id': entity.id, 'segment': segment}|merge(app.request.query.all)) }}" data-pjax-trigger='["#content"]'>Edit</a>
                         </td>
                     </tr>
                 {% endfor %}

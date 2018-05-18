@@ -9,8 +9,10 @@ use App\Repository\UserRepository;
 use App\Service\FiltersHandler;
 use App\Service\Paginator\Pager;
 use Symfony\Component\Form\Extension\Core\Type\MoneyType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Validator\Constraints\NotNull;
 
 class UsersAdmin implements AdminInterface
 {
@@ -76,6 +78,10 @@ class UsersAdmin implements AdminInterface
 
     public function setFormBuilder(FormBuilderInterface $formBuilder): void
     {
-        $formBuilder->add('spent', MoneyType::class);
+        $formBuilder->add('username', TextType::class, [
+            'constraints' => [
+                new NotNull(),
+            ],
+        ]);
     }
 }
