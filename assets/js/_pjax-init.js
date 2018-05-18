@@ -1,7 +1,13 @@
 const Pjax = require('./bridge/pjax-fork');
 
 
-let pjaxInstance;
+const pjaxInstance = new Pjax({
+    elements: ['form[data-pjax-trigger]'],
+    selectors: ['body'],
+    // selectors: ['#content', '#test'],
+    cacheBust: false,
+    debug: false
+});
 
 var initButtons = function () {
     var buttons = document.querySelectorAll('a[data-pjax-trigger]');
@@ -26,8 +32,8 @@ var initButtons = function () {
 
 console.log('Document initialized:', window.location.href);
 
-document.addEventListener('pjax:send', function () {
-    // console.log('Event: pjax:send', arguments)
+document.addEventListener('pjax:send', function (event) {
+    // console.log(event)
 });
 
 document.addEventListener('pjax:complete', function () {
@@ -38,12 +44,13 @@ document.addEventListener('pjax:error', function () {
 });
 
 document.addEventListener('DOMContentLoaded', function () {
-    pjaxInstance = new Pjax({
-        elements: ['form[data-pjax-trigger]'],
-        // selectors: ['#content', '#test'],
-        cacheBust: false,
-        debug: false
-    });
+    // pjaxInstance = new Pjax({
+    //     elements: ['form[data-pjax-trigger]'],
+    //     selectors: ['body'],
+    //     // selectors: ['#content', '#test'],
+    //     cacheBust: false,
+    //     debug: false
+    // });
     initButtons();
 });
 

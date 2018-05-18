@@ -4,7 +4,7 @@
     <div class="ajax-form-wrapper">
         <form action="{{ path('admin_edit', {'segment': segment, 'id': id}|merge(app.request.query.all)) }}"
               method="post"
-              novalidate autocomplete="off" class="pjax">
+              novalidate autocomplete="off" data-pjax-trigger='["#content"]'>
 
             {{ form_errors(form) }}
             {{ form_rest(form) }}

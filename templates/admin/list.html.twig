@@ -7,7 +7,7 @@
 
         <div class="col-3">
             {% if filter_form.children|length %}
-            <form method="get" novalidate autocomplete="off" class="filter-form pjax"
+            <form method="get" novalidate autocomplete="off" class="filter-form" data-pjax-trigger='["#content"]'
                   action="{{ path('admin_list', {'segment': segment}) }}">
                 {{ form_errors(filter_form) }}
 
