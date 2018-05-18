@@ -9,6 +9,6 @@ class BarbaRedirectResponse extends Response
     public function __construct(string $url)
     {
         parent::__construct('');
-        $this->headers->set('redirect-to', $url);
+        $this->headers->set('X-XHR-Redirected-To', $url);
     }
 }

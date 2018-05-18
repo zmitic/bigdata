@@ -1,15 +1,18 @@
-{% extends app.request.headers.has('x-barba') ? 'admin/ajax_body.html.twig' : 'admin/base.html.twig' %}
+{#{% extends app.request.headers.has('X-PJAX') ? 'admin/blank_body.html.twig' : 'admin/base.html.twig' %}#}
+{% extends 'admin/base.html.twig' %}
+
+{% block test %}555{% endblock %}
 
 {% block content %}
     <div class="ajax-form-wrapper">
         <form action="{{ path('admin_edit', {'segment': segment, 'id': id}|merge(app.request.query.all)) }}"
               method="post"
-              novalidate autocomplete="off" class="ajax-form">
+              novalidate autocomplete="off" class="pjax">
 
             {{ form_errors(form) }}
             {{ form_rest(form) }}
 
-            <a class="btn btn-danger"
+            <a class="btn btn-danger pjax"
                href="{{ path('admin_list', {'segment': segment}|merge(app.request.query.all)) }}">Cancel</a>
             <button type="submit" class="btn btn-primary">Update</button>
         </form>

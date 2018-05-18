@@ -1,4 +1,4 @@
-{% extends  'admin/base.html.twig' %}
+{% extends 'admin/base.html.twig' %}
 
 {% block content %}
 
@@ -6,7 +6,7 @@
 
         <div class="col-3">
             {% if filter_form.children|length %}
-            <form method="get" novalidate autocomplete="off" class="filter-form"
+            <form method="get" novalidate autocomplete="off" class="filter-form pjax"
                   action="{{ path('admin_list', {'segment': segment}) }}">
                 {{ form_errors(filter_form) }}
 
@@ -52,9 +52,9 @@
                         {% endfor %}
                         <td>
 
-                            <a href="{{ path('admin_delete', {'id': entity.id, 'segment': segment}|merge(app.request.query.all)) }}">Delete</a>
+                            <a href="{{ path('admin_delete', {'id': entity.id, 'segment': segment}|merge(app.request.query.all)) }}" class="pjax">Delete</a>
 
-                            <a href="{{ path('admin_edit', {'id': entity.id, 'segment': segment}|merge(app.request.query.all)) }}">Edit</a>
+                            <a href="{{ path('admin_edit', {'id': entity.id, 'segment': segment}|merge(app.request.query.all)) }}" class="pjax">Edit</a>
                         </td>
                     </tr>
                 {% endfor %}

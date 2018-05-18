@@ -9,6 +9,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
@@ -83,7 +84,8 @@ class AdminController extends Controller
         if ($form->isSubmitted() && $form->isValid()) {
             $config->persist($entity);
             $routeParams = array_merge(['segment' => $segment], $request->query->all());
-            $response = new BarbaRedirectResponse($this->generateUrl('admin_list', $routeParams));
+
+            return $this->redirectToRoute('admin_list', $routeParams);
         }
 
         return $this->render('admin/edit.html.twig', [
@@ -112,7 +114,8 @@ class AdminController extends Controller
         if ($form->isSubmitted() && $form->isValid()) {
             $config->persist($entity);
             $routeParams = array_merge(['segment' => $segment], $request->query->all());
-            $response = new BarbaRedirectResponse($this->generateUrl('admin_list', $routeParams));
+
+            return $this->redirectToRoute('admin_list', $routeParams);
         }
 
         return $this->render('admin/create.html.twig', [

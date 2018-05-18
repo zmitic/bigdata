@@ -3,11 +3,11 @@
 {% block content %}
 
     <form action="{{ path('admin_delete', {'segment': segment, 'id': id}|merge(app.request.query.all)) }}" method="post" novalidate
-          autocomplete="off">
+          autocomplete="off" class="pjax">
         {{ form_errors(form) }}
         {{ form_rest(form) }}
 
-        <a class="btn btn-danger" href="{{ path('admin_list', {'segment': segment}|merge(app.request.query.all)) }}">Cancel</a>
+        <a class="btn btn-danger pjax" href="{{ path('admin_list', {'segment': segment}|merge(app.request.query.all)) }}">Cancel</a>
         <button type="submit" class="btn btn-primary">Submit</button>
     </form>
 
