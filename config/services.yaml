@@ -32,3 +32,11 @@ services:
            class: Twig_Extensions_Extension_Text
            tags:
                - { name: twig.extension }
+
+#    App\Form\Extension\TextTypeExtension:
+#        tags:
+#            - { name: form.type_extension, extended_type: Symfony\Component\Form\Extension\Core\Type\TextType }
+#
+#    App\Form\Extension\MoneyTypeExtension:
+#        tags:
+#            - { name: form.type_extension, extended_type: Symfony\Component\Form\Extension\Core\Type\MoneyType }

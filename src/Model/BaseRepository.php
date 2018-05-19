@@ -71,6 +71,11 @@ abstract class BaseRepository extends ServiceEntityRepository
         yield Criteria::create()->setMaxResults($maxResults);
     }
 
+    public function applyFilters(array $filters): ?iterable
+    {
+        throw new \Exception('You must implement this method in child class');
+    }
+
     private function appendGeneratorsToQB(QueryBuilder $qb, ?iterable ...$generators): void
     {
         $operators = [];
