@@ -40,7 +40,7 @@ class Product
      */
     private $categoryReferences;
 
-    /** @ORM\Column(type="decimal", nullable=true, scale=2) */
+    /** @ORM\Column(type="float", nullable=true, scale=2) */
     private $basePrice = 0;
 
     public function __construct()
@@ -100,7 +100,7 @@ class Product
         }
     }
 
-    public function getBasePrice(): float
+    public function getBasePrice()
     {
         return $this->basePrice;
     }

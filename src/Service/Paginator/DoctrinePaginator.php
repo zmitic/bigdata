@@ -174,7 +174,7 @@ class DoctrinePaginator implements \Countable, \IteratorAggregate
             $this->appendTreeWalker($countQuery, CountWalker::class);
         }
 
-        $countQuery->setFirstResult(null)->setMaxResults(1000);
+        $countQuery->setFirstResult(null)->setMaxResults(100);
 
         $parser = new Parser($countQuery);
         $parameterMappings = $parser->parse()->getParameterMappings();

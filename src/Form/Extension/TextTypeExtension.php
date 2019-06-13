@@ -10,9 +10,9 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class TextTypeExtension extends AbstractTypeExtension
 {
-    public function getExtendedType(): string
+    public function getExtendedTypes(): array
     {
-        return TextType::class;
+        return [TextType::class];
     }
 
     public function configureOptions(OptionsResolver $resolver): void

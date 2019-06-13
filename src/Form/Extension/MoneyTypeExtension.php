@@ -10,9 +10,9 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class MoneyTypeExtension extends AbstractTypeExtension
 {
-    public function getExtendedType(): string
+    public function getExtendedTypes(): array
     {
-        return MoneyType::class;
+        return [MoneyType::class];
     }
 
     public function configureOptions(OptionsResolver $resolver): void
