@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Command;
 
 use App\Service\EntitiesImporter;
@@ -27,6 +29,11 @@ class PopulateCommand extends Command
         $this->sqlImporter = $sqlImporter;
     }
 
+    public function __destruct()
+    {
+        $this->em->getConnection()->exec('SET autocommit=1;SET unique_checks=1;SET foreign_key_checks=1;');
+    }
+
     protected function configure(): void
     {
         $this->setDescription('Import small amount of data');
@@ -39,7 +46,7 @@ class PopulateCommand extends Command
         $this->em->getConnection()->getConfiguration()->setSQLLogger(null);
         $io->caution('Truncating all tables...');
         $io->write(sprintf("\033\143"));
-//        $this->truncateAllTables();
+        $this->truncateAllTables();
         $this->sqlImporter->import($io);
     }
 
@@ -56,7 +63,7 @@ class PopulateCommand extends Command
         foreach ($tables as $table) {
             $sql .= sprintf('truncate table %s;', $table);
         }
-        $sql .= 'SET FOREIGN_KEY_CHECKS = 1;';
+//        $sql .= 'SET FOREIGN_KEY_CHECKS = 1;';
 
         $this->em->getConnection()->exec($sql);
     }

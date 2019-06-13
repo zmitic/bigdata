@@ -10,7 +10,6 @@ use Doctrine\ORM\EntityManagerInterface;
 use InvalidArgumentException;
 use function random_int;
 use function sprintf;
-use function var_dump;
 
 class EntityStore
 {

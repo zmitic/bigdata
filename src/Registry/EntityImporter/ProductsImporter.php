@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Registry\EntityImporter;
 
 use App\Entity\Manufacturer;
@@ -12,7 +14,7 @@ class ProductsImporter implements EntityImporterInterface
     /** @var EntityManagerInterface */
     private $em;
 
-    public const LIMIT = 1000000;
+    public const LIMIT = 100000000;
 
     public function __construct(EntityManagerInterface $em)
     {
