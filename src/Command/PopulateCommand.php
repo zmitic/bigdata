@@ -46,7 +46,7 @@ class PopulateCommand extends Command
         $this->em->getConnection()->getConfiguration()->setSQLLogger(null);
         $io->caution('Truncating all tables...');
         $io->write(sprintf("\033\143"));
-        $this->truncateAllTables();
+//        $this->truncateAllTables();
         $this->sqlImporter->import($io);
     }
 
@@ -63,9 +63,9 @@ class PopulateCommand extends Command
         SET unique_checks=0;
 SET unique_checks=0;';
         foreach ($tables as $table) {
-            $sql .= sprintf('truncate table %s;', $table);
+            $sql .= sprintf('TRUNCATE TABLE %s;', $table);
         }
-//        $sql .= 'SET FOREIGN_KEY_CHECKS = 1;';
+        $sql .= 'SET FOREIGN_KEY_CHECKS = 1;';
 
         $this->em->getConnection()->exec($sql);
     }
