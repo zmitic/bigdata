@@ -20,7 +20,7 @@ class StopwatchProgressBar
     public function __construct(SymfonyStyle $io, string $key, int $limit)
     {
         $this->createProgressBar($io, $key, $limit);
-        $this->setProgress(10);
+        $this->setProgress(0);
         $this->lastUpdate = new DateTime();
     }
 
@@ -40,7 +40,7 @@ class StopwatchProgressBar
         $advancedFor = $progress - $lastProgress;
 
         $now = new DateTime();
-        $duration = $now->diff($this->lastUpdate)->s;
+        $duration = $now->diff($this->lastUpdate)->s ?? 1;
         if (!$duration) {
             return;
         }

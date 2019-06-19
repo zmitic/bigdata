@@ -46,7 +46,7 @@ class PopulateCommand extends Command
         $this->em->getConnection()->getConfiguration()->setSQLLogger(null);
         $io->caution('Truncating all tables...');
         $io->write(sprintf("\033\143"));
-//        $this->truncateAllTables();
+        $this->truncateAllTables();
         $this->sqlImporter->import($io);
     }
 

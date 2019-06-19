@@ -47,11 +47,11 @@ class EntitiesImporter
         $entities = $importer->getEntities();
         foreach ($entities as $progress => $entity) {
             $stored[] = $entity;
-            if (0 === $count % 3000) {
+            if (0 === $count % 1000) {
                 $this->flushEntities($stored);
                 $stored = [];
-                $progressBar->setProgress($progress);
             }
+            $progressBar->setProgress($progress);
             ++$count;
         }
         $this->flushEntities($stored);

@@ -20,16 +20,21 @@ trait IdentifiableEntityTrait
     /**
      * var \Ramsey\Uuid\UuidInterface.
      *
-     * ORM\Id
-     * ORM\Column(type="uuid", unique=true)
-     * ORM\GeneratedValue(strategy="CUSTOM")
-     * ORM\CustomIdGenerator(class="Ramsey\Uuid\Doctrine\UuidGenerator")
+
      */
 
     /**
      * @ORM\Id()
      * @ORM\Column(type="integer")
      * @ORM\GeneratedValue()
+     *
+     * ORM\Column(type="uuid", unique=true)
+     * ORM\GeneratedValue(strategy="CUSTOM")
+     * ORM\CustomIdGenerator(class="Ramsey\Uuid\Doctrine\UuidGenerator")
+     *
+     * ORM\Column(type="uuid_binary_ordered_time", unique=true)
+     * ORM\GeneratedValue(strategy="CUSTOM")
+     * ORM\CustomIdGenerator(class="Ramsey\Uuid\Doctrine\UuidOrderedTimeGenerator")
      */
     protected $id;
 
