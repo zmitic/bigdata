@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Command;
 
 use App\Service\EntitiesImporter;
@@ -25,6 +27,11 @@ class PopulateCommand extends Command
         parent::__construct();
         $this->em = $em;
         $this->sqlImporter = $sqlImporter;
+    }
+
+    public function __destruct()
+    {
+        $this->em->getConnection()->exec('SET autocommit=1;SET unique_checks=1;SET foreign_key_checks=1;');
     }
 
     protected function configure(): void

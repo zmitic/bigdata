@@ -542,8 +542,8 @@
 
                             for (var i = 0; i < element.options.length; i++) {
                                 opt = element.options[i]
-                                if (opt.selected) {
-                                    values.push(opt.value || opt.text)
+                                if (opt.selected && opt.value) {
+                                    values.push(opt.value)
                                 }
                             }
                         }

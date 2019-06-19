@@ -1,10 +1,8 @@
-{% extends 'admin/base.html.twig' %}
-
+{% extends 'admin/page_layout.html.twig' %}
 
 {% block content %}
 
     <div class="row">
-
         <div class="col-3">
             {% if filter_form.children|length %}
             <form method="get" novalidate autocomplete="off" class="filter-form" data-pjax-trigger='["#content"]'

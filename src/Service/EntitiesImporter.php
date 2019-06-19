@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Service;
 
 use App\DependencyInjection\Compiler\EntitiesImporterPass;
@@ -24,11 +26,6 @@ class EntitiesImporter
     {
         $this->importers = $importers;
         $this->em = $em;
-    }
-
-    public function __destruct()
-    {
-        $this->em->getConnection()->exec('SET autocommit=1;SET unique_checks=1;SET foreign_key_checks=1;');
     }
 
     public function import(SymfonyStyle $io): void

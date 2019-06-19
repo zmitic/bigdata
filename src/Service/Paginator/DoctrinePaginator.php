@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Service\Paginator;
 
 use Doctrine\ORM\Query\Parser;
@@ -172,7 +174,7 @@ class DoctrinePaginator implements \Countable, \IteratorAggregate
             $this->appendTreeWalker($countQuery, CountWalker::class);
         }
 
-        $countQuery->setFirstResult(null)->setMaxResults(1000);
+        $countQuery->setFirstResult(null)->setMaxResults(100);
 
         $parser = new Parser($countQuery);
         $parameterMappings = $parser->parse()->getParameterMappings();

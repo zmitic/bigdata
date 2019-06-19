@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Model;
 
 use App\DependencyInjection\Compiler\RepositoriesPass;
@@ -69,6 +71,11 @@ abstract class BaseRepository extends ServiceEntityRepository
     public function setMaxResults(int $maxResults)
     {
         yield Criteria::create()->setMaxResults($maxResults);
+    }
+
+    public function applyFilters(array $filters): ?iterable
+    {
+        throw new \Exception('You must implement this method in child class');
     }
 
     private function appendGeneratorsToQB(QueryBuilder $qb, ?iterable ...$generators): void

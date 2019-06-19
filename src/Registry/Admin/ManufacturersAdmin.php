@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Registry\Admin;
 
 use App\Entity\Manufacturer;

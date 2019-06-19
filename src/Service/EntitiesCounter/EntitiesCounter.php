@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Service\EntitiesCounter;
 
 use App\Entity\Counter;
@@ -28,6 +30,6 @@ class EntitiesCounter
         /** @var Counter $counter */
         $counter = $this->repository->find($id);
 
-        return $counter->getCount();
+        return $counter ? $counter->getCount() : 0;
     }
 }
