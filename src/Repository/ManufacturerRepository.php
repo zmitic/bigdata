@@ -14,4 +14,9 @@ class ManufacturerRepository extends BaseRepository
     {
         parent::__construct($registry, Manufacturer::class);
     }
+
+    public function whereNameLike(?string $name): iterable
+    {
+        yield $this->make($this->expr()->like('o.name', ':name'), ['name' => $name.'%'], $name);
+    }
 }

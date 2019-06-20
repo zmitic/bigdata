@@ -17,6 +17,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Validator\Constraints\NotNull;
+use Tetranz\Select2EntityBundle\Form\Type\Select2EntityType;
 
 class ProductsAdmin extends AbstractAdmin
 {
@@ -58,6 +59,16 @@ class ProductsAdmin extends AbstractAdmin
                 'constraints' => [
                     new NotNull(),
                 ],
+            ])
+            ->add('manufacturer', Select2EntityType::class, [
+                'remote_route' => 'suggestions_manufacturers',
+                'multiple' => false,
+                'minimum_input_length' => 0,
+                'allow_clear' => true,
+                'delay' => 250,
+                'cache' => true,
+                'cache_timeout' => 60000,
+                'class' => Manufacturer::class,
             ])
             ->add('categories', CategorySelect2Type::class)
         ;

@@ -5,8 +5,10 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use App\Entity\Category;
+use App\Entity\Manufacturer;
 use App\Entity\Product;
 use App\Repository\CategoryRepository;
+use App\Repository\ManufacturerRepository;
 use App\Repository\ProductRepository;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -54,6 +56,27 @@ class SuggestionController extends Controller
             return [
                 'id' => $product->getId(),
                 'text' => (string) $product,
+            ];
+        }, $categories);
+
+        return $this->json($results);
+    }
+
+    /**
+     * @Route("/manufacturers", name="suggestions_manufacturers")
+     */
+    public function manufacturers(Request $request, ManufacturerRepository $repository): JsonResponse
+    {
+        $q = $request->query->get('q');
+        $categories = $repository->getResults(
+            $repository->whereNameLike($q),
+            $repository->setMaxResults(20)
+        );
+
+        $results = array_map(function (Manufacturer $manufacturer) {
+            return [
+                'id' => $manufacturer->getId(),
+                'text' => (string) $manufacturer,
             ];
         }, $categories);
 

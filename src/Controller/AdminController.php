@@ -100,7 +100,6 @@ class AdminController extends AbstractController
         $config = $this->admin->getConfigForSegment($segment);
         $entity = $config->findOne($id);
         $response = new Response();
-
         if (!$entity) {
             throw $this->createNotFoundException();
         }
