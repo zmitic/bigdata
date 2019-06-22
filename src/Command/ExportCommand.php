@@ -51,7 +51,7 @@ class ExportCommand extends Command
         $this->em->getConnection()->getConfiguration()->setSQLLogger(null);
         $io->write(sprintf("\033\143"));
 
-        foreach ($this->getEntities() as $className) {
+        foreach ($this->getEntityClassNames() as $className) {
             $count = $this->entitiesCounter->countForClassName($className);
             $stopWatch = new StopwatchProgressBar($io, $className, $count);
             /** @var EntityRepository $repository */
@@ -71,7 +71,7 @@ class ExportCommand extends Command
         }
     }
 
-    private function getEntities(): iterable
+    private function getEntityClassNames(): iterable
     {
         return [
             Product::class,
