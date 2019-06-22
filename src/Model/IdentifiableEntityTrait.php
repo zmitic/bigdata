@@ -19,8 +19,6 @@ trait IdentifiableEntityTrait
 
     /**
      * var \Ramsey\Uuid\UuidInterface.
-     *
-
      */
 
     /**

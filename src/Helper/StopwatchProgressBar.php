@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Helper;
 
-use DateTime;
+use function microtime;
 use Symfony\Component\Console\Helper\ProgressBar;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
@@ -21,7 +21,7 @@ class StopwatchProgressBar
     {
         $this->createProgressBar($io, $key, $limit);
         $this->setProgress(0);
-        $this->lastUpdate = new DateTime();
+        $this->lastUpdate = microtime(true);
     }
 
     public function __destruct()
@@ -39,13 +39,13 @@ class StopwatchProgressBar
         $lastProgress = $this->lastProgress;
         $advancedFor = $progress - $lastProgress;
 
-        $now = new DateTime();
-        $duration = $now->diff($this->lastUpdate)->s ?? 1;
+        $now = microtime(true);
+        $duration = $now - $this->lastUpdate;
         if (!$duration) {
             return;
         }
 
-        $speedPerSecond = round($advancedFor / $duration);
+        $speedPerSecond = $advancedFor / $duration;
         $this->progressBar->setProgress($progress);
         $this->progressBar->setMessage(sprintf('Speed %s/sec', number_format($speedPerSecond)), 'speed');
         $this->progressBar->setMessage(number_format($progress), 'current_num');
@@ -69,7 +69,7 @@ class StopwatchProgressBar
 
         $formats = [
             '',
-            "<fg=white;bg=cyan>Importing $key </>",
+            "<fg=white;bg=cyan>Processing $key </>",
             '',
             '[%bar%]    %current_num% / %max_num% (%percent%%)',
             '',
