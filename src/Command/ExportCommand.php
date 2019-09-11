@@ -11,6 +11,7 @@ use App\Service\EntitiesCounter\EntitiesCounter;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\QueryBuilder;
+use Generator;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -59,10 +60,11 @@ class ExportCommand extends Command
             $qb = $repository->createQueryBuilder('o')->orderBy('o.id');
 
             $exporter = new BulkExporter($qb);
+            /** @var Product[]|Generator $results */
             $results = $exporter->export(function (QueryBuilder $qb, Product $last) {
                 $qb->getEntityManager()->clear();
 
-                return $qb->andWhere('o.id > :last_id')->setParameter('last_id', $last->getId());
+                $qb->andWhere('o.id > :last_id')->setParameter('last_id', $last->getId());
             });
 
             foreach ($results as $i => $product) {

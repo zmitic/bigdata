@@ -1,7 +1,4 @@
 {
-    "beberlei/assert": {
-        "version": "v3.2.1"
-    },
     "beberlei/doctrineextensions": {
         "version": "v1.0.21"
     },
@@ -113,9 +110,6 @@
     "jdorn/sql-formatter": {
         "version": "v1.2.17"
     },
-    "k911/swoole-bundle": {
-        "version": "v0.5.3"
-    },
     "knplabs/knp-components": {
         "version": "1.3.8"
     },
@@ -136,6 +130,9 @@
     },
     "nikic/php-parser": {
         "version": "4.0-dev"
+    },
+    "ocramius/doctrine-batch-utils": {
+        "version": "2.0.0"
     },
     "ocramius/proxy-manager": {
         "version": "2.2.0"

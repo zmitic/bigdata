@@ -40,7 +40,7 @@ class BulkExporter
             $last = array_pop($results);
             $cloned = clone $qb;
             $next($cloned, $last);
-        } while (null !== $last);
+        } while (true);
     }
 
     private function getResults(QueryBuilder $qb)
